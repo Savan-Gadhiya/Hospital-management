@@ -13,6 +13,10 @@ const PatientSchema = new mongoose.Schema({
         trim: true,
         unique: true
     },
+    password: {
+        type: String,
+        require: true
+    },
     phone: {
         type: Number,
         require: true,
@@ -31,24 +35,27 @@ const PatientSchema = new mongoose.Schema({
         country: String
     },
     dob: Date,
-    hospitalId: {
-        type: String,
-        require: true
-    },
-    department: {
-        type: String,
-        require: true   
-    },
+    hospitalId:  String,
+    departmentId: String,
     disease: [
         {
-            name: String
+            type: String
         }
     ],
-    medicalRecord:[
+    medicalRecord: [
         {
             record: String,
             status: String,
             date: Date,
+        }
+    ],
+    appointments:[
+        {
+            hospitalId: String,
+            departmentId: String,
+            title: String,
+            desc: String,
+            appointmentStatus: String,
         }
     ],
     date: {
@@ -57,6 +64,6 @@ const PatientSchema = new mongoose.Schema({
     }
 });
 
-const Patient = mongoose.model('patient',PatientSchema);
+const Patient = mongoose.model('patient', PatientSchema);
 
 module.exports = Patient;

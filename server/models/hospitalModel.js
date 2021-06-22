@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const bcrypt = require('bcrypt');
 const HospitalSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -32,9 +32,7 @@ const HospitalSchema = new mongoose.Schema({
         {
             name: {
                 type: String,
-                require: true,
-                unique: true,
-                trim: true
+                trim: true,
             }
         }
     ],
@@ -43,6 +41,18 @@ const HospitalSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+
+HospitalSchema.pre('save',async function(next){
+    if(this.isModified('password')){
+        try{
+            this.password = await bcrypt.hash(this.password,12);
+        }
+        catch(err){
+            console.log("Error in password hash ===> ",err);
+        }
+    }
+    next();
+})
 
 const Hospital = mongoose.model('hospital', HospitalSchema);
 
