@@ -4,7 +4,7 @@ const Hospital = require('../models/hospitalModel');
 const Patient = require('../models/patientModel');
 const Staff = require('../models/staffModel');
 
-// ----------------------  Post Request  -----------------------------
+// -----------------------------  Post Request  ------------------------------------
 // Post request for store Hispital data to database 
 router.post('/api/hospital', async (req, res) => {
     try {
@@ -60,8 +60,8 @@ router.post('/api/patient', async (req, res) => {
 //  Post request for store staff data to database
 router.post('/api/staff', async (req, res) => {
     try {
-        const { name, email, phone, gender, address, dob, role, department, salary } = req.body;
-        if (!name || !email || !phone || !gender || !address || !dob || !role || !department || !salary) {
+        const { name, email, phone, gender, address, dob, role, hospitalId, departmentId, salary } = req.body;
+        if (!name || !email || !phone || !gender || !address || !dob || !role || !hospitalId || !departmentId || !salary) {
             throw new Error("Please fill all requied filled");
         }
         const isExits = await Staff.findOne({ email: email });
@@ -78,7 +78,7 @@ router.post('/api/staff', async (req, res) => {
     }
 });
 
-// ----------------------  Get Request  -----------------------------
+// -----------------------------  Get Request  ------------------------------------
 // Get request for getting hospital data 
 router.get('/api/hospital', async (req, res) => {
     try {
@@ -133,7 +133,7 @@ router.get('/api/staff', async (req, res) => {
     }
 });
 
-// ----------------------  patch Request  -----------------------------
+// -----------------------------  patch Request  ------------------------------------
 // Patch request for Updating hospital data
 router.patch('/api/hospital/:hospitalId', async (req, res) => {
     try {
@@ -193,7 +193,21 @@ router.delete('/api/hospital/:hospitalId', async (req, res) => {
     try {
         const hospitalId = req.params.hospitalId;
         let result = await Hospital.findByIdAndDelete({ _id: hospitalId });
-        if (result) res.status(200).json({ massage: `${result.name} is delected successfully` })
+        const delStaff = await Staff.deleteMany({ hospitalId: hospitalId });
+
+        // Delete a appoinment that is taken in this(deleted) hospital
+
+        const listOfupdatePatient = await Patient.find({ "appointments.hospitalId": hospitalId }); // list Of updatePatient this contain a list of all the patient which have appiment with this postital
+        listOfupdatePatient.forEach((ele, idx) => {
+            let appointments = ele.appointments;
+            appointments = appointments.filter((appoinment) => { // and appoinment contain the array of all appinment and we delete that appoinment which has a appoinment with a deleted hospital
+                return appoinment.hospitalId !== hospitalId
+            });
+            Patient.updateOne({ _id: ele.id }, { appointments: appointments })
+                .then((result) => { console.log("appoinment updated when hospital is deleted"); })
+                .catch((err) => { console.log(err); })
+        });
+        if (result) res.status(200).json({ massage: `${result.name} is delected successfully` });
         else res.status(403).json({ message: "Data not found" });
     }
     catch (err) {
@@ -229,4 +243,5 @@ router.delete('/api/staff/:staffId', async (req, res) => {
         res.status(400).json({ message: err.toString() })
     }
 });
+
 module.exports = router;

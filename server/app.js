@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
-dotenv.config({path: "./config/config.env"});
+dotenv.config({ path: "./config/config.env" });
 require('./db/dbConnect')
 const router = require('./router/mainRoute');
 require('colors');
@@ -15,5 +15,5 @@ app.use(router);
 
 app.listen(port, () => {
     console.log(`Server stated at port ${port}`.blue.bold);
-})
+});
 

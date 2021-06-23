@@ -52,7 +52,7 @@ const PatientSchema = new mongoose.Schema({
     appointments:[
         {
             hospitalId: String,
-            departmentId: String,
+            // departmentId: String,
             // title: String,
             // desc: String,
             // appointmentStatus: String,

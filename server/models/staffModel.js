@@ -39,7 +39,7 @@ const StaffSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    department: {
+    departmentId: {
         type: String,
         require: true   
     },
