@@ -42,17 +42,23 @@ const HospitalSchema = new mongoose.Schema({
     }
 });
 
+// Hash the password
 HospitalSchema.pre('save',async function(next){
     if(this.isModified('password')){
-        try{
             this.password = await bcrypt.hash(this.password,12);
-        }
-        catch(err){
-            console.log("Error in password hash ===> ",err);
-        }
     }
     next();
 })
+
+// delete some field and return after updation
+HospitalSchema.methods.hideData = function(){
+    let newObj = this;
+    const fieldToDelete = ["password","date","__v"]
+    fieldToDelete.forEach((key) => {
+        newObj[key] = undefined;
+    });
+    return newObj;
+}
 
 const Hospital = mongoose.model('hospital', HospitalSchema);
 

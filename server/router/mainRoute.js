@@ -1,13 +1,10 @@
-const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 const Hospital = require('../models/hospitalModel');
 const Patient = require('../models/patientModel');
 const Staff = require('../models/staffModel');
-router.get('/', (req, res) => {
-    res.send("Home Page");
-});
 
+// ----------------------  Post Request  -----------------------------
 // Post request for store Hispital data to database 
 router.post('/api/hospital', async (req, res) => {
     try {
@@ -52,7 +49,7 @@ router.post('/api/patient', async (req, res) => {
         }
         const patientData = new Patient(req.body);
         const result = await patientData.save();
-        res.status(201).json({ message: "Patient registered successfully" });
+        res.status(201).json({ message: "Patient added successfully" });
     }
     catch (err) {
         console.log("Error while Storing patient ==> ", err);
@@ -73,7 +70,7 @@ router.post('/api/staff', async (req, res) => {
         }
         const StaffData = new Staff(req.body);
         const result = await StaffData.save();
-        res.status(201).json({message: "Staff member registerd successfully"});
+        res.status(201).json({ message: "Staff member registerd successfully" });
     }
     catch (err) {
         console.log("Error while storing a staff ==> ", err);
@@ -81,6 +78,155 @@ router.post('/api/staff', async (req, res) => {
     }
 });
 
+// ----------------------  Get Request  -----------------------------
+// Get request for getting hospital data 
+router.get('/api/hospital', async (req, res) => {
+    try {
+        const query = req.query; // aa req.query url na je url?name=savan&&age=20 hoy to {"name": "savan","age": 20} ae rite ape
+        console.log(query);
+        for (let key in query) {
+            query[key] = new RegExp(query[key], 'i');
+            if (key === "password") query[key] = undefined;
+        }
+        const result = await Hospital.find(query, { _id: 0, "departments._id": 0, date: 0, __v: 0, password: 0 });
+        if (result.length !== 0) res.status(200).json(result);
+        else res.status(403).json({ message: "No data found" });
+    }
+    catch (err) {
+        console.log("Error while displaying Hospital data: ", err);
+        res.status(400).josn({ message: err.toString() })
+    }
+});
 
+// Get request for getting patient data
+router.get('/api/patient', async (req, res) => {
+    try {
+        const query = req.query;
+        for (let key in query) {
+            query[key] = new RegExp(query[key], "i");
+            if (key === "password") query[key] = undefined;
+        }
+        const result = await Patient.find(query, { _id: 0, date: 0, __v: 0, "appointments._id": 0 });
+        if (result.length !== 0) res.status(200).send(result);
+        else res.status(403).json({ message: "No data found" });
+    }
+    catch (err) {
+        console.log("Error while displaying patient data: ", err);
+        res.send({ message: err.toString() });
+    }
+});
 
+// Get request for getting staff data
+router.get('/api/staff', async (req, res) => {
+    try {
+        const query = req.query;
+        for (let key in query) {
+            query[key] = new RegExp(query[key], "i");
+        }
+        const result = await Staff.find(query, { _id: 0, date: 0, __v: 0 });
+        if (result.length !== 0) res.send(result);
+        else res.status(403).json({ message: "No data found" });
+    }
+    catch (err) {
+        console.log("Error while displaying staff", err);
+        res.status(400).json({ message: err.toString() })
+    }
+});
+
+// ----------------------  patch Request  -----------------------------
+// Patch request for Updating hospital data
+router.patch('/api/hospital/:hospitalId', async (req, res) => {
+    try {
+        const hospitalId = req.params.hospitalId;
+        const data = req.body;
+        let result = await Hospital.findByIdAndUpdate({ _id: hospitalId }, data, {
+            new: true
+        });
+        result = result.hideData();
+        if (result) res.status(200).send(result);
+        else res.status(403).json({ message: "Data not found" });
+    }
+    catch (err) {
+        console.log("Error while Updating hospital detail : ", err);
+        res.status(400).json({ message: err.toString() })
+    }
+});
+
+// Patch request for Updating patients data
+router.patch('/api/patient/:patientId', async (req, res) => {
+    try {
+        const patientId = req.params.patientId;
+        const data = req.body;
+        let result = await Patient.findByIdAndUpdate({ _id: patientId }, data, {
+            new: true
+        });
+        result = result.hideData();
+        if (result) res.status(200).send(result);
+        else res.status(403).json({ message: "Data not found" });
+    }
+    catch (err) {
+        console.log("Error while Updating Patient detail : ", err);
+        res.status(400).json({ message: err.toString() })
+    }
+});
+
+// Patch request for updating staff data
+router.patch('/api/staff/:staffId', async (req, res) => {
+    try {
+        const staffId = req.params.staffId;
+        const data = req.body;
+        let result = await Staff.findByIdAndUpdate({ _id: staffId }, data, {
+            new: true
+        });
+        if (result) res.status(200).send(result);
+        else res.status(403).json({ message: "Data not found" });
+    }
+    catch (err) {
+        console.log("Error while Updating Staff detail : ", err);
+        res.status(400).json({ message: err.toString() })
+    }
+});
+
+// ----------------------  Delete Request  -----------------------------
+// delete request for deleting hospital data
+router.delete('/api/hospital/:hospitalId', async (req, res) => {
+    try {
+        const hospitalId = req.params.hospitalId;
+        let result = await Hospital.findByIdAndDelete({ _id: hospitalId });
+        if (result) res.status(200).json({ massage: `${result.name} is delected successfully` })
+        else res.status(403).json({ message: "Data not found" });
+    }
+    catch (err) {
+        console.log("Error while deleting hospital: ", err);
+        res.status(400).json({ message: err.toString() })
+    }
+});
+
+// delete request for deleting hospital data
+router.delete('/api/patient/:patientId', async (req, res) => {
+    try {
+        const patientId = req.params.patientId;
+        let result = await Patient.findByIdAndDelete({ _id: patientId });
+        if (result) res.status(200).json({ massage: `${result.name} is delected successfully` })
+        else res.status(403).json({ message: "Data not found" });
+    }
+    catch (err) {
+        console.log("Error while deleting patient: ", err);
+        res.status(400).json({ message: err.toString() })
+    }
+});
+
+// delete request for deleting hospital data
+router.delete('/api/staff/:staffId', async (req, res) => {
+    try {
+        const staffId = req.params.staffId;
+        let result = await Staff.findByIdAndDelete({ _id: staffId });
+        if (result) res.status(200).json({ massage: `${result.name} is delected successfully` })
+        else res.status(403).json({ message: "Data not found" });
+    }
+    catch (err) {
+        console.log("Error while deleting staff: ", err);
+        res.status(400).json({ message: err.toString() })
+    }
+});
 module.exports = router;

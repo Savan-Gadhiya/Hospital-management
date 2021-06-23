@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const bcrypt = require('bcrypt');
 const PatientSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -53,9 +53,9 @@ const PatientSchema = new mongoose.Schema({
         {
             hospitalId: String,
             departmentId: String,
-            title: String,
-            desc: String,
-            appointmentStatus: String,
+            // title: String,
+            // desc: String,
+            // appointmentStatus: String,
         }
     ],
     date: {
@@ -63,7 +63,23 @@ const PatientSchema = new mongoose.Schema({
         default: Date.now
     }
 });
+// Hash the password
+PatientSchema.pre("save",async function(next){
+    if(this.isModified('password')){
+        this.password = await bcrypt.hash(this.password,12);
+    }
+    next();
+})
 
+// delete some data 
+PatientSchema.methods.hideData = function(){
+    let newObj = this;
+    const fieldToDelete = ["password","date","__v"]
+    fieldToDelete.forEach((key) => {
+        newObj[key] = undefined;
+    });
+    return newObj;
+}
 const Patient = mongoose.model('patient', PatientSchema);
 
 module.exports = Patient;
