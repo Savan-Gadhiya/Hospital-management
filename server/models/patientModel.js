@@ -52,6 +52,7 @@ const PatientSchema = new mongoose.Schema({
     appointments:[
         {
             hospitalId: String,
+            time: Date
             // departmentId: String,
             // title: String,
             // desc: String,
