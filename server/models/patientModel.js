@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken")
 const PatientSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -63,7 +64,12 @@ const PatientSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    tokens: [
+        {
+            token: String
+        }
+    ]
 });
 // Hash the password
 PatientSchema.pre("save",async function(next){
@@ -72,6 +78,18 @@ PatientSchema.pre("save",async function(next){
     }
     next();
 })
+// Get Autentication Token
+PatientSchema.methods.getAuthenticationToken = async function(){
+    try{
+        const token = jwt.sign({id: this._id},process.env.SECRET_KEY);
+        this.tokens = this.tokens.concat({token: token});
+        await this.save();
+        return token;
+    }
+    catch(err){
+        console.log("Error while genrating Patient token : ",err);
+    }
+}
 
 // delete some data 
 PatientSchema.methods.hideData = function(){

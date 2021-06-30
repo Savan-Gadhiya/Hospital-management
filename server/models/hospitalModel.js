@@ -57,6 +57,7 @@ HospitalSchema.pre('save', async function (next) {
     next();
 })
 
+// Get Authentication token
 HospitalSchema.methods.getAuthenticationToken = async function(){
     try{
         const token = jwt.sign({id: this._id},process.env.SECRET_KEY);

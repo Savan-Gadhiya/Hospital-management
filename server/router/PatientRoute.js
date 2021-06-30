@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Patient = require('../models/patientModel');
-
+const bcrypt = require("bcrypt")
 // Post request for store Patient data to database 
 router.post('/signup', async (req, res) => {
     try {
@@ -26,15 +26,38 @@ router.post('/signup', async (req, res) => {
     }
 });
 
-// router.post('/login',async (req,res) => {
-//     try{
-//         console.log(req.body);
-//         res.send("REquest come");
-//     }   
-//     catch(err){
-//         console.log("Error in patient login  ==> ",err);
-//     }
-// });
+router.post('/login',async (req,res) => {
+    console.log(req.body);
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            throw new Error("Please Fill all the field");
+        }
+        const result = await Patient.findOne({ email: email }); 
+        if (result){
+            const isMatch = await bcrypt.compare(password,result.password);
+            if(isMatch){
+                const token = await result.getAuthenticationToken();
+                // console.log(token);
+                res.cookie("jwtToken", token, {
+                    expires: new Date(Date.now() + 86400000),
+                    httpOnly: true,
+                })
+                res.json({msg: "Login successfull"});
+            }
+            else{
+                res.status(400).json({msg: "Invalid Credential"});
+            }
+        }
+        else
+            res.status(403).json({msg: "Patient is not registerd"});
+
+    }
+    catch (err) {
+        console.log("Error in Patient login  ==> ", err);
+        res.status(400).json({ msg: err.toString() });
+    }
+});
 
 // Get request for getting patient data
 router.get('/', async (req, res) => {
