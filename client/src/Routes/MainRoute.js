@@ -5,6 +5,7 @@ import HospitalSignup from '../Components/Hospital/Signup';
 import HospitalLogin from "../Components/Hospital/Login";
 import PatientSignup from "../Components/Patient/Signup";
 import PatientLogin from "../Components/Patient/Login";
+import About from "../Components/About";
 const MainRoute = () => {
   return (
     <>
@@ -14,6 +15,7 @@ const MainRoute = () => {
         <Route exact path="/hospital/login" component={HospitalLogin} />
         <Route exact path="/patient/signup" component={PatientSignup} />
         <Route exact path="/patient/login" component={PatientLogin} />
+        <Route exact path="/about" component={About} />
       </Switch>
     </>
   );
