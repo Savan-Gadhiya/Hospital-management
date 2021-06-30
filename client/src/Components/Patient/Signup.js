@@ -1,29 +1,13 @@
-import React, { useState } from "react";
-import {
-  Container,
-  makeStyles,
-  TextField,
-  Typography,
-  Paper,
-  Grid,
-  Button,
-} from "@material-ui/core";
-
-import ShowAlert from "../Form_Component/ShowAlert";
-import HospitalImage from "../../Images/Hospital.jpg";
-import useDefaultStyle from "../Form_Component/FormStyle";
-
-const useStyle = makeStyles((theme) => ({
-  container:{ 
-    background: `url(${HospitalImage})`
-  }
-}))
-
+import React, { useState } from 'react'
+import { Container, Paper, Typography, TextField, Grid, Button, RadioGroup, Radio, FormControl, FormControlLabel, FormLabel } from '@material-ui/core';
+import useDefaultStyle from '../Form_Component/FormStyle'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import ShowAlert from '../Form_Component/ShowAlert';
 const Signup = () => {
   const DefaultClasses = useDefaultStyle();
-  const classes = useStyle();
-  const [errors, setErrors] = useState({});
 
+  const [errors, setErrors] = useState({});
   const [isSuccess, setIsSuccess] = useState(false); // For chack submit status and diaplay alert
   const [isError, setIsError] = useState({ error: false, errorMsg: "" }); // For chack submit status and diaplay alert
   const [values, setValues] = useState({
@@ -32,6 +16,8 @@ const Signup = () => {
     password: "",
     cpassword: "",
     phone: "",
+    gender: "male",
+    dob: new Date(),
     address: {
       address1: "",
       address2: "",
@@ -40,9 +26,7 @@ const Signup = () => {
       state: "",
       country: "",
     },
-    departments: [],
   });
-  const [departmentStr, setDepartmentStr] = useState(""); // For taking department String
 
   // for handaling input
   const handleInputChange = (e) => {
@@ -59,19 +43,15 @@ const Signup = () => {
     setErrors({ ...errors, ...temp });
   };
 
-  // for handle department
-  const HandleDepartmentsChange = (e) => {
-    setDepartmentStr(e.target.value)
-    const { name, value } = e.target;
-    const departmentArr = value.split(",");
-    let DepartmentObj = [];
-    departmentArr.forEach((ele, idx) => {
-      if (ele !== "") DepartmentObj.push({ name: ele });
-    });
-    setValues({ ...values, departments: DepartmentObj });
-  };
-  const temp = { ...errors };
+  // Convert date to a event params
+  const convertDateToDefEventPara = (name, value) => ({
+    target: {
+      name: name,
+      value: value
+    }
+  })
 
+  const temp = { ...errors };
   // Validdate Address
   const validateAddress = (fieldValue = values.address) => {
     if ("address1" in fieldValue)
@@ -101,12 +81,10 @@ const Signup = () => {
       temp.phone = fieldValue.phone.length === 10 ? "" : "Phone number is exact 10 digits"
     if ("address" in fieldValue)
       validateAddress(fieldValue.address);
-    if ("departmentStr" in fieldValue)
-      temp.departments = departmentStr ? "" : "This field is requeird"
-    if ("departments" in fieldValue)
-      temp.departments = fieldValue.departments.length !== 0 ? "" : "This field is reuired"
-
+    if("dob" in fieldValue)
+      temp.dob = fieldValue.dob < new Date() ? "" : "Invalid Date of Birth"
     setErrors({ ...temp });
+
 
     if (fieldValue === values) {
       return Object.values(temp).every((val) => val === "");
@@ -124,6 +102,8 @@ const Signup = () => {
       password: "",
       cpassword: "",
       phone: "",
+      gender: "male",
+      dob: new Date(),
       address: {
         address1: "",
         address2: "",
@@ -132,9 +112,7 @@ const Signup = () => {
         state: "",
         country: "",
       },
-      departments: [],
     });
-    setDepartmentStr("");
     setErrors({});
   }
 
@@ -148,7 +126,7 @@ const Signup = () => {
       try {
         console.log("sending requsest....");
         // Send a request to save data
-        const response = await fetch("http://localhost:8000/api/hospital/signup", {
+        const response = await fetch("/api/patient/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -174,34 +152,23 @@ const Signup = () => {
   };
 
 
-
   return (
     <>
-      <Container className={`${DefaultClasses.container}  ${classes.container}`}>
-
-
+      <Container className={DefaultClasses.container}>
         <Paper className={DefaultClasses.paperStyle}>
           {/* Alert */}
-
           {
             isSuccess && (<ShowAlert title="Success" description="Your account created successfully" />)
           }
           {
             isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
           }
-
-          {/* Heading */}
-          <Typography variant="h3" component="h1" className={DefaultClasses.heading}>
-            Hospital Signup Form
-          </Typography>
-          {/* Form Detail */}
-          <form method="POST" className={DefaultClasses.form} onSubmit={SubmitForm}>
-            {/* autoComplete="off" */}
-            {/* Name */}
+          <Typography variant="h3" component="h1" className={DefaultClasses.heading}>Signup</Typography>
+          <form method="POST" className={DefaultClasses.form} onSubmit={SubmitForm} >
             <TextField
               variant="standard"
               name="name"
-              label="Hospital Name"
+              label="Full Name"
               margin="normal"
               value={values.name}
               onChange={handleInputChange}
@@ -212,7 +179,7 @@ const Signup = () => {
             <TextField
               variant="standard"
               name="email"
-              label="Hospital Email"
+              label="Email Address"
               type="email"
               margin="normal"
               value={values.email}
@@ -256,6 +223,32 @@ const Signup = () => {
               {...(errors.phone && { error: true, helperText: errors.phone })}
               fullWidth
             />
+            {/* Gender */}
+            <FormControl component="fieldset" margin="normal">
+              <FormLabel component="legend">Gender</FormLabel>
+              <RadioGroup aria-label="gender" name="gender" row value={values.gender} onChange={handleInputChange} >
+                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                <FormControlLabel value="other" control={<Radio />} label="Other" />
+              </RadioGroup>
+            </FormControl>
+            {/* DOB */}
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                variant="inline"
+                format="dd MMMM yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date picker inline"
+                value={values.dob}
+                onChange={(date) => { handleInputChange(convertDateToDefEventPara("dob", date)); }}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                {...(errors.dob && { error: true, helperText: errors.dob })}
+                fullWidth
+              />
+            </MuiPickersUtilsProvider>
             {/* Address line 1 */}
             <TextField
               variant="standard"
@@ -340,18 +333,7 @@ const Signup = () => {
                 />
               </Grid>
             </Grid>
-            {/* Department */}
-            <TextField
-              variant="standard"
-              name="departmentStr"
-              label="Departments Name"
-              placeholder="If Multiple Department add them sepreted by comma(,)"
-              onChange={HandleDepartmentsChange}
-              value={departmentStr}
-              {...(errors.departments && { error: true, helperText: errors.departments })}
-              fullWidth
-              margin="normal"
-            />
+
             {/* Submit Button */}
             <Button
               type="submit"
@@ -368,7 +350,7 @@ const Signup = () => {
         </Paper>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

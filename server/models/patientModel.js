@@ -28,7 +28,8 @@ const PatientSchema = new mongoose.Schema({
         require: true
     },
     address: {
-        street: String,
+        address1: String,
+        address2: String,
         city: String,
         pincode: Number,
         state: String,
