@@ -11,39 +11,16 @@ import {
 
 import ShowAlert from "../Form_Component/ShowAlert";
 import HospitalImage from "../../Images/Hospital.jpg";
-const useStyle = makeStyles((theme) => ({
-  container: {
-    background: `url(${HospitalImage})`,
-    backgroundSize: "cover",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    minHeight: "100vh",
-  },
-  paperStyle: {
-    width: "60%",
-    padding: `${theme.spacing(1)}px ${theme.spacing(3)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
-    margin: `${theme.spacing(5)}px 0px`,
-  },
-  heading: {
-    margin: `${theme.spacing(2)}px 0px`,
-    textAlign: "center",
-  },
-  form: {
-    width: "100%",
-  },
-  btn: {
-    margin: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-    // border: "4px solid black"
-  },
+import useDefaultStyle from "../Form_Component/FormStyle";
 
-  link: {
-    color: "#1E4620"
+const useStyle = makeStyles((theme) => ({
+  container:{ 
+    background: `url(${HospitalImage})`
   }
-}));
+}))
 
 const Signup = () => {
+  const DefaultClasses = useDefaultStyle();
   const classes = useStyle();
   const [errors, setErrors] = useState({});
 
@@ -200,10 +177,10 @@ const Signup = () => {
 
   return (
     <>
-      <Container className={classes.container}>
+      <Container className={`${DefaultClasses.container}  ${classes.container}`}>
 
 
-        <Paper className={classes.paperStyle}>
+        <Paper className={DefaultClasses.paperStyle}>
           {/* Alert */}
 
           {
@@ -214,11 +191,11 @@ const Signup = () => {
           }
 
           {/* Heading */}
-          <Typography variant="h3" component="h1" className={classes.heading}>
+          <Typography variant="h3" component="h1" className={DefaultClasses.heading}>
             Hospital Signup Form
           </Typography>
           {/* Form Detail */}
-          <form method="POST" className={classes.form} onSubmit={SubmitForm}>
+          <form method="POST" className={DefaultClasses.form} onSubmit={SubmitForm}>
             {/* autoComplete="off" */}
             {/* Name */}
             <TextField
@@ -380,11 +357,11 @@ const Signup = () => {
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.btn}
+              className={DefaultClasses.btn}
             >
               Signup Now
             </Button>
-            <Button type="reset" variant="contained" className={classes.btn} onClick={resetForm}>
+            <Button type="reset" variant="contained" className={DefaultClasses.btn} onClick={resetForm}>
               Reset
             </Button>
           </form>
