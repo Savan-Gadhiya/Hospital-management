@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 const HospitalSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -40,7 +41,12 @@ const HospitalSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    tokens: [
+        {
+            token: String
+        }
+    ]
 });
 
 // Hash the password
@@ -51,10 +57,22 @@ HospitalSchema.pre('save', async function (next) {
     next();
 })
 
+HospitalSchema.methods.getAuthenticationToken = async function(){
+    try{
+        const token = jwt.sign({id: this._id},process.env.SECRET_KEY);
+        this.tokens = this.tokens.concat({token: token});
+        await this.save();
+        return token;
+    }
+    catch(err){
+        console.log("Error while genrating hospital token : ",err);
+    }
+}
+
 // delete some field and return after updation
 HospitalSchema.methods.hideData = function () {
     let newObj = this;
-    const fieldToDelete = ["password", "date", "__v"]
+    const fieldToDelete = ["password", "date","tokens", "__v"]
     fieldToDelete.forEach((key) => {
         newObj[key] = undefined;
     });

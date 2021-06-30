@@ -5,12 +5,13 @@ const cors = require('cors')
 dotenv.config({ path: "./config/config.env" });
 require('./db/dbConnect')
 const router = require('./router/mainRoute');
+const cookieParser = require('cookie-parser')
 require('colors');
 
 
-const port = process.env.PORT || 8000;
 app.use(cors())
-
+const port = process.env.PORT || 8000;
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(router);

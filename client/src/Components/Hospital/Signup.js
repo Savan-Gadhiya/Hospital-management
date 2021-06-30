@@ -148,7 +148,7 @@ const Signup = () => {
         setIsError({ error: false, errorMsg: "" });
         console.log("sending requsest....");
         // Send a request to save data
-        const response = await fetch("http://localhost:8000/api/hospital", {
+        const response = await fetch("http://localhost:8000/api/hospital/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

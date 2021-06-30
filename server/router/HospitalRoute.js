@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require("bcrypt")
 const Hospital = require('../models/hospitalModel');
 const Patient = require('../models/patientModel');
 const Staff = require('../models/staffModel');
@@ -31,6 +32,39 @@ router.post('/signup', async (req, res) => {
     catch (err) {
         res.status(400).json({ error: err.toString() });
         console.log("Error While saving a Hospital Data ==> ", err, typeof err);
+    }
+});
+
+// Post erquest for login
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            throw new Error("Please Fill all the field");
+        }
+        const result = await Hospital.findOne({ email: email }); 
+        if (result){
+            const isMatch = await bcrypt.compare(password,result.password);
+            if(isMatch){
+                const token = await result.getAuthenticationToken();
+                // console.log(token);
+                res.cookie("jwtToken", token, {
+                    expires: new Date(Date.now() + 86400000),
+                    httpOnly: true,
+                })
+                res.json({msg: "Login successfull"});
+            }
+            else{
+                res.status(400).json({msg: "Invalid Credential"});
+            }
+        }
+        else
+            res.status(403).json({msg: "Hospital is not registerd"});
+
+    }
+    catch (err) {
+        console.log("Error in Hospital login  ==> ", err);
+        res.status(400).json({ msg: err.toString() });
     }
 });
 

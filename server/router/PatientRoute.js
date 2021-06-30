@@ -26,6 +26,16 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+// router.post('/login',async (req,res) => {
+//     try{
+//         console.log(req.body);
+//         res.send("REquest come");
+//     }   
+//     catch(err){
+//         console.log("Error in patient login  ==> ",err);
+//     }
+// });
+
 // Get request for getting patient data
 router.get('/', async (req, res) => {
     try {
