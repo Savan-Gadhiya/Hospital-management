@@ -8,11 +8,11 @@ import {
   Grid,
   Button,
 } from "@material-ui/core";
+
+import ShowAlert from "../Form_Component/ShowAlert";
 import HospitalImage from "../../Images/Hospital.jpg";
 const useStyle = makeStyles((theme) => ({
   container: {
-    // maxWidth: "60%",
-    // border: "2px solid red",
     background: `url(${HospitalImage})`,
     backgroundSize: "cover",
     display: "flex",
@@ -23,9 +23,7 @@ const useStyle = makeStyles((theme) => ({
   },
   paperStyle: {
     width: "60%",
-    padding: `${theme.spacing(1)}px ${theme.spacing(3)}px ${theme.spacing(
-      3
-    )}px ${theme.spacing(3)}px`,
+    padding: `${theme.spacing(1)}px ${theme.spacing(3)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
     margin: `${theme.spacing(5)}px 0px`,
   },
   heading: {
@@ -39,11 +37,18 @@ const useStyle = makeStyles((theme) => ({
     margin: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
     // border: "4px solid black"
   },
+
+  link: {
+    color: "#1E4620"
+  }
 }));
 
 const Signup = () => {
   const classes = useStyle();
+  const [errors, setErrors] = useState({});
 
+  const [isSuccess, setIsSuccess] = useState(false); // For chack submit status and diaplay alert
+  const [isError, setIsError] = useState({ error: false, errorMsg: "" }); // For chack submit status and diaplay alert
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -60,18 +65,21 @@ const Signup = () => {
     },
     departments: [],
   });
-  const [departmentStr,setDepartmentStr]  = useState("");
+  const [departmentStr, setDepartmentStr] = useState(""); // For taking department String
 
   // for handaling input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
+    validate({ [name]: value });
   };
 
   // for handle Address Change
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, address: { ...values.address, [name]: value } });
+    validateAddress({ [name]: value });
+    setErrors({ ...errors, ...temp });
   };
 
   // for handle department
@@ -85,17 +93,126 @@ const Signup = () => {
     });
     setValues({ ...values, departments: DepartmentObj });
   };
+  const temp = { ...errors };
 
-  const SubmitForm = (e) => {
+  // Validdate Address
+  const validateAddress = (fieldValue = values.address) => {
+    if ("address1" in fieldValue)
+      temp.address1 = fieldValue.address1 ? "" : "Address is required";
+    if ("city" in fieldValue)
+      temp.city = fieldValue.city ? "" : "City is required";
+    if ("pincode" in fieldValue)
+      temp.pincode = fieldValue.pincode.length === 6 ? "" : "pincode must be of 6 digits";
+    if ("state" in fieldValue)
+      temp.state = fieldValue.state ? "" : "state is required";
+    if ("country" in fieldValue)
+      temp.country = fieldValue.country ? "" : "country is required";
+    setErrors({ ...errors, ...temp })
+  }
+
+  // Validation in Form
+  const validate = (fieldValue = values) => {
+    if ("name" in fieldValue)
+      temp.name = fieldValue.name ? "" : "This field is requird"
+    if ("email" in fieldValue)
+      temp.email = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/.test(fieldValue.email) ? "" : "Email address is not valid"
+    if ("password" in fieldValue)
+      temp.password = fieldValue.password.length >= 8 ? "" : "Password is minimum 8 charector long"
+    if ("cpassword" in fieldValue)
+      temp.cpassword = (values.password === fieldValue.cpassword && fieldValue.cpassword) ? "" : "Password and confirm password are must be same"
+    if ("phone" in fieldValue)
+      temp.phone = fieldValue.phone.length === 10 ? "" : "Phone number is exact 10 digits"
+    if ("address" in fieldValue)
+      validateAddress(fieldValue.address);
+    if ("departmentStr" in fieldValue)
+      temp.departments = departmentStr ? "" : "This field is requeird"
+    if ("departments" in fieldValue)
+      temp.departments = fieldValue.departments.length !== 0 ? "" : "This field is reuired"
+
+    setErrors({ ...temp });
+
+    if (fieldValue === values) {
+      return Object.values(temp).every((val) => val === "");
+    }
+  }
+
+  // Reset Form
+  const resetForm = (e = null) => {
+    if (e)
+      e.preventDefault();
+    console.log("Restfrom called");
+    setValues({
+      name: "",
+      email: "",
+      password: "",
+      cpassword: "",
+      phone: "",
+      address: {
+        address1: "",
+        address2: "",
+        city: "",
+        pincode: "",
+        state: "",
+        country: "",
+      },
+      departments: [],
+    });
+    setDepartmentStr("");
+    setErrors({});
+  }
+
+  // Submit form
+  const SubmitForm = async (e) => {
     e.preventDefault();
-    console.log("Form Submited");
-    e.target.reset();
+    window.scrollTo(0, 0);
+    if (validate()) {
+      try {
+        setIsSuccess(false);
+        setIsError({ error: false, errorMsg: "" });
+        console.log("sending requsest....");
+        // Send a request to save data
+        const response = await fetch("http://localhost:8000/api/hospital", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(values)
+        });
+        const Data = await response.json();
+        console.log("Data = ", Data);
+        if (response.status === 201) {
+          setIsSuccess(true);
+          resetForm();
+        }
+        else
+          setIsError({ error: true, errorMsg: Data.error });
+      }
+      catch (err) {
+        console.log("Error while sening data:  ", err);
+      }
+    }
+    else {
+      setIsError({ error: true, errorMsg: "Please Fill all the field properly" });
+    }
   };
 
+
+
   return (
-    <div>
+    <>
       <Container className={classes.container}>
+
+
         <Paper className={classes.paperStyle}>
+          {/* Alert */}
+
+          {
+            isSuccess && (<ShowAlert title="Success" description="Your account created successfully" />)
+          }
+          {
+            isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
+          }
+
           {/* Heading */}
           <Typography variant="h3" component="h1" className={classes.heading}>
             Hospital Signup Form
@@ -111,7 +228,7 @@ const Signup = () => {
               margin="normal"
               value={values.name}
               onChange={handleInputChange}
-              required
+              {...(errors.name && { error: true, helperText: errors.name })}
               fullWidth
             />
             {/* Email */}
@@ -123,7 +240,7 @@ const Signup = () => {
               margin="normal"
               value={values.email}
               onChange={handleInputChange}
-              required
+              {...(errors.email && { error: true, helperText: errors.email })}
               fullWidth
             />
             {/* Password */}
@@ -135,7 +252,7 @@ const Signup = () => {
               margin="normal"
               value={values.password}
               onChange={handleInputChange}
-              required
+              {...(errors.password && { error: true, helperText: errors.password })}
               fullWidth
             />
             {/* Confirm password */}
@@ -147,7 +264,7 @@ const Signup = () => {
               margin="normal"
               value={values.cpassword}
               onChange={handleInputChange}
-              required
+              {...(errors.cpassword && { error: true, helperText: errors.cpassword })}
               fullWidth
             />
             {/* Phone */}
@@ -159,7 +276,7 @@ const Signup = () => {
               margin="normal"
               value={values.phone}
               onChange={handleInputChange}
-              required
+              {...(errors.phone && { error: true, helperText: errors.phone })}
               fullWidth
             />
             {/* Address line 1 */}
@@ -170,7 +287,7 @@ const Signup = () => {
               margin="normal"
               value={values.address.address1}
               onChange={handleAddressChange}
-              required
+              {...(errors.address1 && { error: true, helperText: errors.address1 })}
               fullWidth
             />
             {/* Address line 2 */}
@@ -181,7 +298,7 @@ const Signup = () => {
               margin="normal"
               value={values.address.address2}
               onChange={handleAddressChange}
-              required
+              {...(errors.address2 && { error: true, helperText: errors.address2 })}
               fullWidth
             />
 
@@ -195,7 +312,8 @@ const Signup = () => {
                   margin="normal"
                   value={values.address.city}
                   onChange={handleAddressChange}
-                  required
+                  {...(errors.city && { error: true, helperText: errors.city })}
+
                   fullWidth
                 />
               </Grid>
@@ -208,7 +326,7 @@ const Signup = () => {
                   margin="normal"
                   value={values.address.state}
                   onChange={handleAddressChange}
-                  required
+                  {...(errors.state && { error: true, helperText: errors.state })}
                   fullWidth
                 />
               </Grid>
@@ -224,7 +342,8 @@ const Signup = () => {
                   margin="normal"
                   value={values.address.country}
                   onChange={handleAddressChange}
-                  required
+                  {...(errors.country && { error: true, helperText: errors.phone })}
+
                   fullWidth
                 />
               </Grid>
@@ -238,7 +357,8 @@ const Signup = () => {
                   margin="normal"
                   value={values.address.pincode}
                   onChange={handleAddressChange}
-                  required
+                  {...(errors.pincode && { error: true, helperText: errors.pincode })}
+
                   fullWidth
                 />
               </Grid>
@@ -251,7 +371,7 @@ const Signup = () => {
               placeholder="If Multiple Department add them sepreted by comma(,)"
               onChange={HandleDepartmentsChange}
               value={departmentStr}
-              required
+              {...(errors.departments && { error: true, helperText: errors.departments })}
               fullWidth
               margin="normal"
             />
@@ -264,13 +384,13 @@ const Signup = () => {
             >
               Signup Now
             </Button>
-            <Button type="submit" variant="contained" className={classes.btn}>
+            <Button type="reset" variant="contained" className={classes.btn} onClick={resetForm}>
               Reset
             </Button>
           </form>
         </Paper>
       </Container>
-    </div>
+    </>
   );
 };
 

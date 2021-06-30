@@ -3,11 +3,15 @@ const router = express.Router();
 const Hospital = require('../models/hospitalModel');
 const Patient = require('../models/patientModel');
 const Staff = require('../models/staffModel');
-
+router.get("/test",(req,res) => {
+    res.send("Api Running");
+})
+// router.use(router)
 // -----------------------------  Post Request  ------------------------------------
 // Post request for store Hispital data to database 
 router.post('/api/hospital', async (req, res) => {
     try {
+        // console.log("request come : ",req.body);
         const { name, email, phone, password, cpassword, departments, address } = req.body;
         // Check that all field are filled or not
         if (!name || !email || !phone || !password || !cpassword || !departments || !address) {
