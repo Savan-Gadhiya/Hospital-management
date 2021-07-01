@@ -1,18 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const Staff = require('../models/staffModel');
-
+const AuthenticateHospital = require("../middleware/AuthenticateHospital")
 //  Post request for store staff data to database
-router.post('/signup', async (req, res) => {
+router.post('/addstaff', AuthenticateHospital, async (req, res) => {
+    console.log("REquest COME =============");
     try {
-        const { name, email, phone, gender, address, dob, role, hospitalId, departmentId, salary } = req.body;
-        if (!name || !email || !phone || !gender || !address || !dob || !role || !hospitalId || !departmentId || !salary) {
+        const { name, email, phone, gender, address, dob, role,hospitalId, departmentId, salary } = req.body;
+        if (!name || !email || !phone || !gender || !address || !dob || !hospitalId || !role || !hospitalId || !departmentId || !salary) {
             throw new Error("Please fill all requied filled");
         }
+        
         const isExits = await Staff.findOne({ email: email });
         if (isExits) {
             throw new Error("Staff member aleadry registerd");
         }
+        console.log(req.body);
         const StaffData = new Staff(req.body);
         const result = await StaffData.save();
         res.status(201).json({ message: "Staff member registerd successfully" });
@@ -23,6 +26,9 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+router.get('/getstaff', AuthenticateHospital, async (req, res) => { // Get data of a hospital which are login
+    res.json(req.HospitalDetail);
+})
 
 // Get request for getting staff data
 router.get('/', async (req, res) => {

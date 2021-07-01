@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Hospital  = require("../models/hospitalModel");
 
-const PatientAuthenticate = async (req,res,next) => {
+const HospitalAuthenticate = async (req,res,next) => {
     try{
         // console.log("REquest come");
         const token = req.cookies.jwtToken;
@@ -11,6 +11,10 @@ const PatientAuthenticate = async (req,res,next) => {
         if(!result){
             throw new Error("You need to login for accessing this page content")
         }
+        // Set some importent data to undefined
+        result.password = undefined;
+        result.__v = undefined;
+        result.tokens = undefined;
         req.token = token;
         req.id = result._id;
         req.HospitalDetail = result;
@@ -22,4 +26,4 @@ const PatientAuthenticate = async (req,res,next) => {
     }
 }
 
-module.exports = PatientAuthenticate;
+module.exports = HospitalAuthenticate;

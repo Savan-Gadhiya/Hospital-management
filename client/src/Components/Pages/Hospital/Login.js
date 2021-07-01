@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Container, Paper, Typography, TextField, Button, makeStyles } from '@material-ui/core';
-import useDefaultStyle from '../Form_Component/FormStyle';
+import useDefaultStyle from '../../Form_Component/FormStyle';
 import { useHistory } from "react-router-dom";
-import ShowAlert from '../Form_Component/ShowAlert';
+import ShowAlert from '../../Form_Component/ShowAlert';
 const useStyle = makeStyles((theme) => ({
   paperStyle: {
     width: "50%"

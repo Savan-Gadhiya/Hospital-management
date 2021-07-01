@@ -1,32 +1,35 @@
 import React, { useState } from 'react'
 import { Container, Paper, Typography, TextField, Grid, Button, RadioGroup, Radio, FormControl, FormControlLabel, FormLabel } from '@material-ui/core';
-import useDefaultStyle from '../Form_Component/FormStyle'
+import useDefaultStyle from '../../Form_Component/FormStyle'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import ShowAlert from '../Form_Component/ShowAlert';
+import ShowAlert from '../../Form_Component/ShowAlert';
+
+const initalValue = {
+  name: "",
+  email: "",
+  password: "",
+  cpassword: "",
+  phone: "",
+  gender: "male",
+  dob: new Date(),
+  address: {
+    address1: "",
+    address2: "",
+    city: "",
+    pincode: "",
+    state: "",
+    country: "",
+  },
+}
+
 const Signup = () => {
   const DefaultClasses = useDefaultStyle();
 
   const [errors, setErrors] = useState({});
   const [isSuccess, setIsSuccess] = useState(false); // For chack submit status and diaplay alert
   const [isError, setIsError] = useState({ error: false, errorMsg: "" }); // For chack submit status and diaplay alert
-  const [values, setValues] = useState({
-    name: "",
-    email: "",
-    password: "",
-    cpassword: "",
-    phone: "",
-    gender: "male",
-    dob: new Date(),
-    address: {
-      address1: "",
-      address2: "",
-      city: "",
-      pincode: "",
-      state: "",
-      country: "",
-    },
-  });
+  const [values, setValues] = useState(initalValue);
 
   // for handaling input
   const handleInputChange = (e) => {
@@ -81,7 +84,7 @@ const Signup = () => {
       temp.phone = fieldValue.phone.length === 10 ? "" : "Phone number is exact 10 digits"
     if ("address" in fieldValue)
       validateAddress(fieldValue.address);
-    if("dob" in fieldValue)
+    if ("dob" in fieldValue)
       temp.dob = fieldValue.dob < new Date() ? "" : "Invalid Date of Birth"
     setErrors({ ...temp });
 
@@ -96,23 +99,7 @@ const Signup = () => {
     if (e)
       e.preventDefault();
     console.log("Restfrom called");
-    setValues({
-      name: "",
-      email: "",
-      password: "",
-      cpassword: "",
-      phone: "",
-      gender: "male",
-      dob: new Date(),
-      address: {
-        address1: "",
-        address2: "",
-        city: "",
-        pincode: "",
-        state: "",
-        country: "",
-      },
-    });
+    setValues(initalValue);
     setErrors({});
   }
 

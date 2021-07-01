@@ -9,16 +9,31 @@ import {
   Button,
 } from "@material-ui/core";
 
-import ShowAlert from "../Form_Component/ShowAlert";
-import HospitalImage from "../../Images/Hospital.jpg";
-import useDefaultStyle from "../Form_Component/FormStyle";
+import ShowAlert from "../../Form_Component/ShowAlert";
+import HospitalImage from "../../../Images/Hospital.jpg";
+import useDefaultStyle from "../../Form_Component/FormStyle";
 
 const useStyle = makeStyles((theme) => ({
   container:{ 
     background: `url(${HospitalImage})`
   }
 }))
-
+const initalValue = {
+  name: "",
+  email: "",
+  password: "",
+  cpassword: "",
+  phone: "",
+  address: {
+    address1: "",
+    address2: "",
+    city: "",
+    pincode: "",
+    state: "",
+    country: "",
+  },
+  departments: [],
+}
 const Signup = () => {
   const DefaultClasses = useDefaultStyle();
   const classes = useStyle();
@@ -26,22 +41,7 @@ const Signup = () => {
 
   const [isSuccess, setIsSuccess] = useState(false); // For chack submit status and diaplay alert
   const [isError, setIsError] = useState({ error: false, errorMsg: "" }); // For chack submit status and diaplay alert
-  const [values, setValues] = useState({
-    name: "",
-    email: "",
-    password: "",
-    cpassword: "",
-    phone: "",
-    address: {
-      address1: "",
-      address2: "",
-      city: "",
-      pincode: "",
-      state: "",
-      country: "",
-    },
-    departments: [],
-  });
+  const [values, setValues] = useState(initalValue);
   const [departmentStr, setDepartmentStr] = useState(""); // For taking department String
 
   // for handaling input
@@ -117,23 +117,7 @@ const Signup = () => {
   const resetForm = (e = null) => {
     if (e)
       e.preventDefault();
-    console.log("Restfrom called");
-    setValues({
-      name: "",
-      email: "",
-      password: "",
-      cpassword: "",
-      phone: "",
-      address: {
-        address1: "",
-        address2: "",
-        city: "",
-        pincode: "",
-        state: "",
-        country: "",
-      },
-      departments: [],
-    });
+    setValues(initalValue);
     setDepartmentStr("");
     setErrors({});
   }

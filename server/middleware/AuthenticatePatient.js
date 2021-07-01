@@ -9,6 +9,11 @@ const PatientAuthenticate = async (req,res,next) => {
         if(!result){
             throw new Error("You need to login for accessing this page content")
         }
+        // // Set some importent data to undefined
+        result.password = undefined;
+        result._id = undefined;
+        result.__v = undefined;
+        result.tokens = undefined;
         req.token = token;
         req.id = result._id;
         req.PatientDetail = result;
