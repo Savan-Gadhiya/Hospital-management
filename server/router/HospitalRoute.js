@@ -77,7 +77,7 @@ router.get('/', async (req, res) => {
             query[key] = new RegExp(query[key], 'i');
             if (key === "password") query[key] = undefined;
         }
-        const result = await Hospital.find(query, { _id: 0, "departments._id": 0, date: 0, __v: 0, password: 0 });
+        const result = await Hospital.find(query, { "departments._id": 0, date: 0, __v: 0, password: 0 ,tokens: 0});
         if (result.length !== 0) res.status(200).json(result);
         else res.status(403).json({ message: "No data found" });
     }

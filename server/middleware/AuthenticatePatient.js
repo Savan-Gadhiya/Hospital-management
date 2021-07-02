@@ -4,6 +4,7 @@ const Patient  = require("../models/patientModel");
 const PatientAuthenticate = async (req,res,next) => {
     try{
         const token = req.cookies.jwtToken;
+        
         const id = jwt.verify(token,process.env.SECRET_KEY).id;
         const result = await Patient.findOne({_id: id});
         if(!result){
@@ -11,12 +12,12 @@ const PatientAuthenticate = async (req,res,next) => {
         }
         // // Set some importent data to undefined
         result.password = undefined;
-        result._id = undefined;
         result.__v = undefined;
         result.tokens = undefined;
         req.token = token;
         req.id = result._id;
         req.PatientDetail = result;
+        console.log("Authentication successfull");
         next();
     }
     catch(err){

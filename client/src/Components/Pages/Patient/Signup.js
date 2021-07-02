@@ -124,7 +124,7 @@ const Signup = () => {
         console.log("Data = ", Data);
         if (response.status === 201) {
           setIsSuccess(true);
-          resetForm();
+          setValues(initalValue);
         }
         else
           setIsError({ error: true, errorMsg: Data.error });

@@ -13,13 +13,12 @@ const Create = () => {
 const Test = () => {
     return (
         <>
-            
-                <Layout>
-                    <Create />
-                    {/* <Switch>
-                    <Route exact path="/test/create" component={() => {return (<Create />)}} />
-                </Switch> */}
-                </Layout>
+            <Layout>
+                <h1>This is Direct Compoentn</h1>
+                <Switch>
+                    <Route exact path="/test/create" component={() => { return (<Create />) }} />
+                </Switch>
+            </Layout>
         </>
     )
 }

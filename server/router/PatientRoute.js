@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Patient = require('../models/patientModel');
 const bcrypt = require("bcrypt")
+const AuthenticaetPatient = require("../middleware/AuthenticatePatient");
 // Post request for store Patient data to database 
 router.post('/signup', async (req, res) => {
     try {
@@ -78,9 +79,10 @@ router.get('/', async (req, res) => {
 });
 
 // Patch request for Updating patients data
-router.patch('/:patientId', async (req, res) => {
-    try {
+router.patch('/:patientId',AuthenticaetPatient ,async (req, res) => {
+    try {   
         const patientId = req.params.patientId;
+        console.log("Appoinments :: ",req.body.appointments);
         const data = req.body;
         let result = await Patient.findByIdAndUpdate({ _id: patientId }, data, {
             new: true
@@ -109,4 +111,9 @@ router.delete('/:patientId', async (req, res) => {
     }
 });
 
+// Authenticat Patient
+router.get("/authenticate",AuthenticaetPatient,async (req,res) => {
+    // console.log(req.PatientDetail);
+    res.send(req.PatientDetail);
+})
 module.exports = router;

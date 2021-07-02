@@ -1,0 +1,21 @@
+.card{
+    padding: 10px;
+    margin: 10px;
+    box-shadow: 1px 1px 3px 1px #999;
+    width: 300px;
+}
+.blue-bg{
+    background-color: rgb(222, 241, 247);
+}
+.green-bg{
+    background-color: rgb(208, 247, 208);
+}
+.pink-bg{
+    background-color: rgb(255, 222, 227);
+}
+.title{
+    color: #222;
+}
+.value{
+    color: #444
+}

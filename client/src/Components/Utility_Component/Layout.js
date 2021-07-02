@@ -8,12 +8,12 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3),
+        // padding: theme.spacing(3),
     },
 }));
 
-export default function ClippedDrawer(props) {
-    console.log(props);
+const Layout = (props) => {
+    // console.log(props);
     const classes = useStyles();
 
     return (
@@ -21,8 +21,7 @@ export default function ClippedDrawer(props) {
             <div className={classes.root}>
                 <SideBar />
                 <main className={classes.content}>
-                    <Toolbar />
-                    <h1>Heafing this is a  hadind</h1>
+                    {/* <Toolbar /> */}
                     {props.children}
                 </main>
 
@@ -30,3 +29,4 @@ export default function ClippedDrawer(props) {
         </>
     );
 }
+export default Layout;
