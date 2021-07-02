@@ -96,7 +96,7 @@ const NewAppoinment = () => {
   const validate = (fieldValue = values) => {
     const temp = { ...errors };
     if ("hospitalName" in fieldValue)
-      temp.hospitalId = fieldValue.hospitalId ? "" : "Hospital name is requied";
+      temp.hospitalName = fieldValue.hospitalName ? "" : "Hospital name is requied";
     if ("time" in fieldValue)
       temp.time =
         new Date(fieldValue.time) > new Date()
@@ -176,7 +176,7 @@ const NewAppoinment = () => {
               style={{ marginTop: "10px" }}
               getOptionLabel={(option) => { return `${option.name}, ${option.address.city}, ${option.address.pincode}`; }}
               onChange={(e, value) => { handleInputChange(convrtToDefaultInputValue(value)); }}
-              renderInput={(params) => ( <TextField {...params} label="Select a Hospital" variant="standard" {...(errors.hospitalId && { error: true, helperText: errors.hospitalId, })} />
+              renderInput={(params) => ( <TextField {...params} label="Select a Hospital" variant="standard" {...(errors.hospitalName && { error: true, helperText: errors.hospitalName, })} />
               )}
               style={{ margin: "10px 0px" }}
             />
