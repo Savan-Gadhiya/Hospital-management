@@ -4,7 +4,7 @@ const Patient  = require("../models/patientModel");
 const PatientAuthenticate = async (req,res,next) => {
     try{
         const token = req.cookies.jwtToken;
-        
+        // console.log("Authentication for patient...");
         const id = jwt.verify(token,process.env.SECRET_KEY).id;
         const result = await Patient.findOne({_id: id});
         if(!result){
