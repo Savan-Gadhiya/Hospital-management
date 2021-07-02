@@ -14,7 +14,9 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import TouchAppRoundedIcon from '@material-ui/icons/TouchAppRounded';
 import AccessTimeRoundedIcon from '@material-ui/icons/AccessTimeRounded';
 import { useHistory, useLocation } from 'react-router-dom';
-
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   active: {
     background: "#f2f2f2",
+    borderLeft: "5px solid #303F9F",
   }
 }));
 
@@ -45,12 +48,27 @@ const SideBar = () => {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const isPatient = useState(false);
-  const patientArr = [
-    { name: "Dashbord", icon: <DashboardIcon />, path: "/dashbord/patient" },
-    { name: "Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashbord/patient/appoinments" },
-    { name: "New Appoinment", icon: <TouchAppRoundedIcon />, path: "/dashbord/patient/newappoinment" },
+  const [isPatient, setIsPatient] = useState(false);
+  useState(() => {
+    if (location.pathname.includes("/dashboard/patient")) {
+      setIsPatient(true);
+    }
+    else {
+      setIsPatient(false);
+    }
+  }, [location.pathname])
 
+  const patientArr = [
+    { name: "Dashboard", icon: <DashboardIcon />, path: "/dashboard/patient" },
+    { name: "Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/patient/appoinments" },
+    { name: "New Appoinment", icon: <TouchAppRoundedIcon />, path: "/dashboard/patient/newappoinment" },
+    // { name: "All Hospitals", icon: <LocalHospitalIcon />, path: "/dashboard/patient/allHospitals" },
+  ]
+  const HospitalArr = [
+    { name: "Dashboard", icon: <DashboardIcon />, path: "/dashboard/hospital" },
+    { name: "Add New Employee", icon: <PersonAddIcon />, path: "/dashboard/hospital/addemployee" },
+    { name: "Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/hospital/appoinments" },
+    { name: "All Employee", icon: <SupervisorAccountIcon />, path: "/dashboard/hospital/allemployee" },
   ]
   return (
     <>
@@ -62,15 +80,25 @@ const SideBar = () => {
           paper: classes.drawerPaper,
         }}
       >
+
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {patientArr.map((item, index) => (
-              <ListItem button key={item.name} onClick={() => { history.push(item.path)}} className={location.pathname === item.path ? classes.active : null }>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.name} />
-              </ListItem>
-            ))}
+            {
+              isPatient ?
+              (patientArr.map((item, index) => (
+                <ListItem button key={item.name} onClick={() => { history.push(item.path) }} className={location.pathname === item.path ? classes.active : null}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.name} />
+                </ListItem>
+              ))) :
+              (HospitalArr.map((item, index) => (
+                <ListItem button key={item.name} onClick={() => { history.push(item.path) }} className={location.pathname === item.path ? classes.active : null}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.name} />
+                </ListItem>
+              )))
+              }
           </List>
           <Divider />
           {/* <List>

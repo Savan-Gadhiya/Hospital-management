@@ -61,7 +61,7 @@ const NewAppoinment = () => {
     if (response.status === 200) {
       setPatientData(response.data);
     } else {
-      history.push("/dashbord/patient");
+      history.push("/dashboard/patient");
     }
   };
 
@@ -132,7 +132,7 @@ const NewAppoinment = () => {
         console.log(data);
         if (response.status === 200) {
           window.alert("Your Appoinment Booked Successfully");
-          history.push("/dashbord/patient");
+          history.push("/dashboard/patient");
         } else {
           setIsError({ error: true, errorMsg: data.message });
         }

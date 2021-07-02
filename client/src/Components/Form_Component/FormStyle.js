@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core";
 const useStyle = makeStyles((theme) => ({
     container: {
         //   background: `url(${HospitalImage})`,
-        background: "#efefef",
+        // background: "#efefef",
         backgroundSize: "cover",
         display: "flex",
         alignItems: "center",

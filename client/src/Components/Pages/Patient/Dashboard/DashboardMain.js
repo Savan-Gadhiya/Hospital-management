@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from '../../../Utility_Component/Card';
-import "./PDashbord.css";
-const DashbordMain = () => {
+import "./PDashboard.css";
+const DashboardMain = () => {
     return (
         <>
         <div className="card-container">
@@ -14,4 +14,4 @@ const DashbordMain = () => {
     )
 }
 
-export default DashbordMain
+export default DashboardMain

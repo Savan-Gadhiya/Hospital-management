@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Switch, Route } from 'react-router';
-import DashbordMain from './Dashboard/DashbordMain';
+import { Switch, Route,Redirect } from 'react-router';
+import DashboardMain from './Dashboard/DashboardMain';
 import NewAppoinment from './Dashboard/NewAppoinment';
 import { getPatientData } from '../../Utility_Component/Utility functions';
 import Appointments from './Dashboard/Appointments';
-const PDashbord = () => {
+const PDashboard = () => {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [patientData, setPatientData] = useState({});
 
@@ -23,9 +23,10 @@ const PDashbord = () => {
             {
                 isLoggedin ?
                     (<Switch>
-                        <Route exact path="/dashbord/patient"> <DashbordMain /> </Route>
-                        <Route path="/dashbord/patient/appoinments"> <Appointments /> </Route>
-                        <Route path="/dashbord/patient/newappoinment"> <NewAppoinment /> </Route>
+                        <Route exact path="/dashboard/patient"> <DashboardMain /> </Route>
+                        <Route path="/dashboard/patient/appoinments"> <Appointments /> </Route>
+                        <Route path="/dashboard/patient/newappoinment"> <NewAppoinment /> </Route>
+                        <Redirect to='/dashboard/patient' />
                     </Switch>
                     ) : <h1>You need to login for access this page</h1>
 
@@ -34,4 +35,4 @@ const PDashbord = () => {
     )
 }
 
-export default PDashbord;
+export default PDashboard;

@@ -8,7 +8,7 @@ import PatientLogin from "../Components/Pages/Patient/Login";
 import About from "../Components/Pages/About";
 import AddStaff from "../Components/Pages/Staff/AddStaff";
 import NavBar from "../Components/Utility_Component/NavBar";
-import DashBord from "../Components/Pages/DashBord";
+import DashBoard from "../Components/Pages/DashBoard";
 import Test from "../Components/test";
 import Test2 from "../Components/test2";
 
@@ -23,9 +23,9 @@ const MainRoute = () => {
           <Route exact path="/hospital/login" component={HospitalLogin} />
           <Route exact path="/patient/signup" component={PatientSignup} />
           <Route exact path="/patient/login" component={PatientLogin} />
-          <Route exact path="/addemployee" component={AddStaff} />
+          {/* <Route exact path="/hospital/addemployee" component={AddStaff} /> */}
           <Route exact path="/about" component={About} />
-          <Route path="/dashbord" component={DashBord} />
+          <Route path="/dashboard" component={DashBoard} />
           <Route path="/test" component={Test} />
           <Route exact path="/test2" component={Test2} />
           <Route component={() => <h1>404 Error Page</h1>} />
