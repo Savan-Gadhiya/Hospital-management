@@ -6,11 +6,11 @@ const AuthenticateHospital = require("../middleware/AuthenticateHospital")
 router.post('/addstaff', AuthenticateHospital, async (req, res) => {
     console.log("REquest COME =============");
     try {
-        const { name, email, phone, gender, address, dob, role,hospitalId, departmentId, salary } = req.body;
+        const { name, email, phone, gender, address, dob, role, hospitalId, departmentId, salary } = req.body;
         if (!name || !email || !phone || !gender || !address || !dob || !hospitalId || !role || !hospitalId || !departmentId || !salary) {
             throw new Error("Please fill all requied filled");
         }
-        
+
         const isExits = await Staff.findOne({ email: email });
         if (isExits) {
             throw new Error("Staff member aleadry registerd");
@@ -26,9 +26,10 @@ router.post('/addstaff', AuthenticateHospital, async (req, res) => {
     }
 });
 
-router.get('/getstaff', AuthenticateHospital, async (req, res) => { // Get data of a hospital which are login
-    res.json(req.HospitalDetail);
-})
+// GEt staff of hospital which is logged in
+// router.get('/getstaff', AuthenticateHospital, async (req, res) => { // Get data of a hospital which are login
+//     res.json(req.HospitalDetail);
+// })
 
 // Get request for getting staff data
 router.get('/', async (req, res) => {
@@ -37,7 +38,7 @@ router.get('/', async (req, res) => {
         for (let key in query) {
             query[key] = new RegExp(query[key], "i");
         }
-        const result = await Staff.find(query, { _id: 0, date: 0, __v: 0 });
+        const result = await Staff.find(query, { date: 0, __v: 0 });
         if (result.length !== 0) res.send(result);
         else res.status(403).json({ message: "No data found" });
     }
@@ -47,6 +48,20 @@ router.get('/', async (req, res) => {
     }
 });
 
+// get a staff of given hospital
+router.get('/getstaff',AuthenticateHospital,async (req,res) => {
+    try{
+        const hospitalId = req.id; // this will contain the hospital id
+        const result = await Staff.find({hospitalId: hospitalId},{__v:0});
+        console.log(result)
+        if(result)  res.status(200).json(result);
+        else    res.status(403).json({msg: "No data found"});
+    }
+    catch(err){
+        console.log("Error while sending logedin hospital staff: ",err);
+        res.status(400).json({msg: err.toString()})
+    }
+})
 
 // Patch request for updating staff data
 router.patch('/:staffId', async (req, res) => {

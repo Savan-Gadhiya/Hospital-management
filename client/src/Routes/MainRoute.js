@@ -9,7 +9,7 @@ import About from "../Components/Pages/About";
 import AddStaff from "../Components/Pages/Staff/AddStaff";
 import NavBar from "../Components/Utility_Component/NavBar";
 import DashBoard from "../Components/Pages/DashBoard";
-import Test from "../Components/test";
+import Test from "../Components/Pages/Hospital/Dashboard/AppointmentEditDialog";
 import Test2 from "../Components/test2";
 
 const MainRoute = () => {

@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Container, Paper, Table, TableRow, TableCell, TableBody, makeStyles, TablePagination } from '@material-ui/core';
+import { Typography, Container, IconButton, Paper, Table, TableRow, TableCell, TableBody, makeStyles, TablePagination } from '@material-ui/core';
 import { getHospitalData } from '../../../Utility_Component/Utility functions';
 import THead from '../../../Utility_Component/TableHead';
 import { useHistory } from "react-router-dom";
+import EditIcon from '@material-ui/icons/Edit';
+import PopPopDialogBox from './AppointmentEditDialog';
+import UpdateAppointmentForm from './UpdateAppointmentForm';
+// import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutlined';
+// import { green } from '@material-ui/core/colors';
+// <CheckCircleOutlinedIcon style={{ color: green[500] }} />
 
 const useStyle = makeStyles((theme) => ({
   table: {
     marginTop: theme.spacing(3),
     "& thead th": {
       fontWeight: "600",
-      // color: theme.palette.primary.main,
       backgroundColor: "#d5d9f0"
-      // color: theme.palette.primary.main,
-      // background: theme.palette.primary.light
     },
     "& tbody td": {
       fontWeight: "400",
@@ -25,9 +28,23 @@ const useStyle = makeStyles((theme) => ({
 
 const HAppointment = () => {
   const [allAppointmentData, setAllAppointmentData] = useState([]);
+  const [allEmployee, setAllEmployee] = useState([]);
+  const [errors, setErrors] = useState({}); // This will contain errors in form
   const [HospitalData, setHospitalData] = useState({});
+  const [appointmentId, setAppointmentId] = useState(""); // This will contain a value of appointment id which is clicked for edits
+  const [openModal, setOpenModal] = useState(false);
   const classes = useStyle();
   const history = useHistory();
+  const [updateAppointment, setUpdateAppointment] = useState({
+    name: "",
+    email: "",
+    staffName: "",
+    staffId: "",
+    remarks: "",
+    medicalStatus: "",
+    medicine: "",
+    medicineArr: ""
+  })
 
   // for pagination
   const pagesOption = [5, 10, 25, 50];
@@ -39,6 +56,7 @@ const HAppointment = () => {
     const response = await getHospitalData();
     if (response.status === 200) {
       const data = response.data;
+      console.log("Hospital ID = ", data);
       setHospitalData(data);
     }
     else {
@@ -58,12 +76,10 @@ const HAppointment = () => {
       });
       const data = await response.json();
       if (response.status === 200) {
-
         setAllAppointmentData(data);
-
       }
       else {
-        console.log(data)
+        // console.log(data)
         console.log("Connot get data with status code 200 ")
       }
 
@@ -73,22 +89,40 @@ const HAppointment = () => {
     }
   }
 
+  // Fetch all employee list
+  const fetchEmployeeList = async () => {
+    const response = await fetch(`/api/staff/getstaff`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      credentials: "include"
+    });
+    const data = await response.json();
+    setAllEmployee(data);
+  }
+
   useEffect(() => {
     fetchHospitalData();
     fetchAllAppointment();
   }, []);
+  useEffect(() => {
+    fetchEmployeeList();
+  }, []) // aamname call kariye to hospital id nathi(use state asychronouly work kare atle) malati aetle aam kariyu
 
   const TableHeadCell = [
     { id: "sr.no", label: "Sr.No" },
     { id: "name", label: "Name" },
     { id: "email", label: "Email" },
     { id: "mobile", label: "Mobile No." },
+    { id: "appointmentStatus", label: "Appointment Status" },
     { id: "appoitmentTime", label: "Appoitment Time" },
+    { id: "actions", label: "Actions" },
   ];
-  let idxCounter = 0;
 
   // For Pagination
-  const handleChnagePage = (e, newPage) => {
+  const handleChangePage = (e, newPage) => {
     setPage(newPage);
   }
 
@@ -98,10 +132,72 @@ const HAppointment = () => {
     setPage(0);
   }
 
+  // Update value
+
+  const validateUpdate = (fieldValue = updateAppointment) => {
+    const temp = { ...errors };
+    if ("staffName" in fieldValue)
+      temp.staffName = fieldValue.staffName ? "" : "Please Fill staff Name"
+    if ("medicalStatus" in fieldValue)
+      temp.medicalStatus = fieldValue.medicalStatus ? "" : "Medical Status is required"
+    setErrors({ ...temp });
+    if (fieldValue === updateAppointment)
+      return Object.values(temp).every((x) => x === "");
+  }
+
+  const handleUpdateChange = (e) => {
+    if(!e)  return;// jo e ma kai value nahi hoy to direct return kariyu aa combo input mathi jaya value add kari ne kadhi nakhashe tayare error aavashe
+    const { name, value } = e.target;
+    if (name === "medicine") {
+      const medicineArr = value.split(",");
+      setUpdateAppointment({ ...updateAppointment, medicine: value, medicineArr: medicineArr })
+    }
+    else if (name === "staffName") setUpdateAppointment({ ...updateAppointment, [name]: value, staffId: e.target.id }) // aapade jate target jebu banaviyu che "convertToDefaultInputValue" name na function ma
+    else setUpdateAppointment({ ...updateAppointment, [name]: value });
+    validateUpdate({ [name]: value });
+  }
+
+  const SubmitUpdatedAppointment = async () => {
+    try {
+      if (validateUpdate()) {
+        setOpenModal(true);
+        console.log(errors)
+        const response = await fetch(`/api/appointment/${appointmentId}`, {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify(updateAppointment)
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+          console.log(data);
+          setUpdateAppointment({ name: "", email: "", staffName: "", staffId: "", remarks: "", medicalStatus: "", medicine: "", medicineArr: "" }) // Clear all fields
+          setErrors();
+        }
+        else {
+          console.log("Appointment not updated get response with other than 200 status code")
+        }
+
+      }
+
+    }
+    catch (err) {
+      console.log("Error while updating appointment")
+    }
+  }
+
   return (
     <>
       <Container>
+        {/* This will open a update appointment Pop Pop box */}
+        <PopPopDialogBox open={openModal} setOpen={setOpenModal} title="Update Appointment" onClickOnSaveChange={SubmitUpdatedAppointment}>
+          <UpdateAppointmentForm onChange={handleUpdateChange} values={updateAppointment} allEmployee={allEmployee} errors={errors}/>
+        </PopPopDialogBox>
         <Paper style={{ margin: '10px', padding: "10px" }}>
+
           <Typography variant="h3" component="h1">Appointments</Typography>
           {
             allAppointmentData !== undefined && allAppointmentData.length ?
@@ -118,7 +214,13 @@ const HAppointment = () => {
                               <TableCell>{appointment.patientName}</TableCell>
                               <TableCell>{appointment.patientEmail}</TableCell>
                               <TableCell>{appointment.patientPhone}</TableCell>
+                              <TableCell>{appointment.appointmentStatus}</TableCell>
                               <TableCell>{new Date(appointment.appointmentTime).toLocaleString()}</TableCell>
+                              <TableCell>
+                                <IconButton onClick={() => { setOpenModal(true); setAppointmentId(appointment._id); setUpdateAppointment({ ...updateAppointment, name: appointment.patientName, email: appointment.patientEmail }) }} id={index}>
+                                  <EditIcon style={{ color: "#555" }} />
+                                </IconButton>
+                              </TableCell>
                               {/* <TableCell>{new Date(appointment.time).toLocaleString()}</TableCell> */}
                             </TableRow>
                           </>
@@ -132,9 +234,9 @@ const HAppointment = () => {
                     page={page}
                     rowsPerPageOptions={pagesOption}
                     rowsPerPage={rowsPerPages}
-                    count={idxCounter}
+                    count={allAppointmentData.length}
                     onChangeRowsPerPage={handleChangeRowParPage}
-                    onChangePage={handleChnagePage}
+                    onChangePage={handleChangePage}
                   />
                 </>
               ) : "You not Book any appointment"

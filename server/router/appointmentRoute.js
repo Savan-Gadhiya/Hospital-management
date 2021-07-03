@@ -41,37 +41,59 @@ router.post('/bookappointment', AuthenticatePatient, async (req, res) => {
 })
 
 // Display a appointment for patient
-router.get('/getforpatient',AuthenticatePatient,async (req,res) => {
-    try{
+router.get('/getforpatient', AuthenticatePatient, async (req, res) => {
+    try {
         // const {...other} = req.body;
-        const result = await Appointment.find({patientId: req.id},{__v:0,patientName: 0,patientEmail: 0,patientPhone: 0});
-        if(result){
+        const result = await Appointment.find({ patientId: req.id }, { __v: 0, patientName: 0, patientEmail: 0, patientPhone: 0 });
+        if (result) {
             res.status(200).json(result);
         }
-        else{
+        else {
             res.status(500).json("Something want to wrong");
         }
     }
-    catch(err){
+    catch (err) {
         console.log("Error while displaying appointment");
-        res.status(400).json({msg: err.toString()});
+        res.status(400).json({ msg: err.toString() });
     }
 })
+
 // Display appointment for hospital
-router.get('/getforhospital',AuthenticateHospital,async (req,res) => {
-    try{
+router.get('/getforhospital', AuthenticateHospital, async (req, res) => {
+    try {
         // const {...other} = req.body;
-        const result = await Appointment.find({hospitalId: req.id},{__v:0,hospitalName: 0,hospitalEmail: 0,hospitalPhone: 0});
-        if(result){
+        const result = await Appointment.find({ hospitalId: req.id }, { __v: 0, hospitalName: 0, hospitalEmail: 0, hospitalPhone: 0 });
+        if (result) {
             res.status(200).json(result);
         }
-        else{
+        else {
             res.status(500).json("Something want to wrong");
         }
     }
-    catch(err){
+    catch (err) {
         console.log("Error while displaying appointment");
-        res.status(400).json({msg: err.toString()});
+        res.status(400).json({ msg: err.toString() });
+    }
+})
+// Update a appointment
+router.patch("/:appointmentId", AuthenticateHospital, async (req, res) => {
+    try {
+        const appointmentId = req.params.appointmentId;
+        const data = req.body;
+        const result = await Appointment.findByIdAndUpdate({ _id: appointmentId }, {
+            appointmentStatus: "close",
+            staffName: data.staffName,
+            staffId: data.staffId,
+            remarks: data.remarks,
+            medicalStatus: data.medicalStatus,
+            medicine: data.medicineArr
+        }, { new: true });
+        if (result) res.status(200).json({ msg: "Appointment updated successfully" });
+        else res.status(500).json({ msg: "Error while updating data Please try after some time" })
+    }
+    catch (err) {
+        console.log("Error while updating appointment");
+        res.status(400).json({ msg: err.toString() });
     }
 })
 module.exports = router;

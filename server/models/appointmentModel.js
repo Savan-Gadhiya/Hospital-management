@@ -13,6 +13,7 @@ const AppointmentSchema = mongoose.Schema({
     hospitalName: String,
     hospitalEmail:String,
     hospitalPhone: String,
+
     hospitalId: {
         type: String,
         require: true
@@ -21,7 +22,8 @@ const AppointmentSchema = mongoose.Schema({
         type: Date,
         require: true
     },
-    docterName: String,
+    staffName: String,
+    staffId: String,
     appointmentStatus: {
         type: String,
         default: "open"

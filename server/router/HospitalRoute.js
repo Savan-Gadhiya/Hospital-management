@@ -151,4 +151,8 @@ router.get("/getpatient", AuthenticateHospital, async (req, res) => {
         console.log("Error in get PAtient Hospital Appointment", err);
     }
 })
+
+router.get("/getHospitalDetail",AuthenticateHospital,async (req,res) => {
+    res.send(req.HospitalDetail);
+})
 module.exports = router;

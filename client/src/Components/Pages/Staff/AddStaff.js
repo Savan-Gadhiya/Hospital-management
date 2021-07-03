@@ -36,7 +36,7 @@ const AddEmployee = () => {
   const [HospitalDetail, setHospitalDetail] = useState({});
 
   const FetchHospitalDetail = async () => {
-    const response = await fetch("/api/staff/getstaff", {
+    const response = await fetch("/api/hospital/getHospitalDetail", {
       method: "GET",
       headers: {
         Accept: "application/json",
