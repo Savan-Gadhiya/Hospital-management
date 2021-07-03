@@ -29,6 +29,9 @@ const useStyle = makeStyles((theme) => ({
     },
     link: {
         color: "#1E4620"
+    },
+    alert: {
+        margin: "5px auto"
     }
 }));
 export default useStyle;

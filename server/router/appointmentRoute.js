@@ -59,10 +59,10 @@ router.get('/getforpatient', AuthenticatePatient, async (req, res) => {
 })
 
 // Display appointment for hospital
-router.get('/getforhospital', AuthenticateHospital, async (req, res) => {
+router.post('/getforhospital', AuthenticateHospital, async (req, res) => {
     try {
-        // const {...other} = req.body;
-        const result = await Appointment.find({ hospitalId: req.id }, { __v: 0, hospitalName: 0, hospitalEmail: 0, hospitalPhone: 0 });
+        const {...other} = req.body;
+        const result = await Appointment.find({ hospitalId: req.id ,...other}, { __v: 0, hospitalName: 0, hospitalEmail: 0, hospitalPhone: 0 });
         if (result) {
             res.status(200).json(result);
         }

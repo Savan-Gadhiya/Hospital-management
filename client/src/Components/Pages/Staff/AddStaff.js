@@ -46,10 +46,10 @@ const AddEmployee = () => {
     });
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     if (response.status === 200) {
       setHospitalDetail(data);
-      console.log('HospitalDetail = ',data);
+      // console.log('HospitalDetail = ',data);
       setValues({...values,hospitalId : data._id});
     }
     else {
@@ -105,7 +105,7 @@ const AddEmployee = () => {
     if ("name" in fieldValue)
       temp.name = fieldValue.name ? "" : "This field is requird"
     if ("email" in fieldValue)
-      temp.email = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/.test(fieldValue.email) ? "" : "Email address is not valid"
+      temp.email = /^[a-zA-z_.0-9]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}/.test(fieldValue.email) ? "" : "Email address is not valid"
     if ("phone" in fieldValue)
       temp.phone = fieldValue.phone.length === 10 ? "" : "Phone number is exact 10 digits"
     if ("address" in fieldValue)
@@ -132,7 +132,7 @@ const AddEmployee = () => {
       e.preventDefault();
     setValues(initalValue);
     setErrors({});
-    setIsSuccess(false);
+    // setIsSuccess(false);
     setIsError({error: false, errorMsg: ""});
   }
 
@@ -181,7 +181,7 @@ const AddEmployee = () => {
         <Paper className={DefaultClasses.paperStyle}>
           {/* Alert */}
           {
-            isSuccess && (<ShowAlert title="Success" description="Your account created successfully" />)
+            isSuccess && (<ShowAlert title="Success" description="Your account created successfully" className={DefaultClasses.alert}/>)
           }
           {
             isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
@@ -240,7 +240,7 @@ const AddEmployee = () => {
                 format="dd MMMM yyyy"
                 margin="normal"
                 id="date-picker-inline"
-                label="Date picker inline"
+                label="Date Of Birth"
                 value={values.dob}
                 onChange={(date) => { handleInputChange(convertDateToDefEventPara("dob", date)); }}
                 KeyboardButtonProps={{

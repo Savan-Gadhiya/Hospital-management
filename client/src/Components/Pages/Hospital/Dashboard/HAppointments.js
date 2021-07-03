@@ -67,12 +67,13 @@ const HAppointment = () => {
   const fetchAllAppointment = async () => {
     try {
       const response = await fetch("/api/appointment/getforhospital", {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json"
         },
-        credentials: "include"
+        credentials: "include",
+        body: JSON.stringify({appointmentStatus: "open"})
       });
       const data = await response.json();
       if (response.status === 200) {
@@ -173,7 +174,7 @@ const HAppointment = () => {
         });
         const data = await response.json();
         if (response.status === 200) {
-          console.log(data);
+          // console.log(data);
           setUpdateAppointment({ name: "", email: "", staffName: "", staffId: "", remarks: "", medicalStatus: "", medicine: "", medicineArr: "" }) // Clear all fields
           setErrors();
         }
