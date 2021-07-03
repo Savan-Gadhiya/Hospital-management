@@ -24,6 +24,7 @@ const useStyle = makeStyles((theme) => ({
 
 const Appointments = () => {
   const [patientData, setPatientData] = useState({});
+  const [appointmentData, setAppointmentData] = useState([]);
   const classes = useStyle();
 
   // for pagination
@@ -35,14 +36,32 @@ const Appointments = () => {
     const response = await getPatientData();
     // console.log(response.data);
     if (response.status === 200) {
-      const appointmentsRev = response.data.appointments.reverse();
-      setPatientData({ ...response.data, appointments: appointmentsRev });
+      setPatientData(response.data);
     }
 
   }
+
+  const fetchAppointments = async () => {
+    const response = await fetch("/api/appointment/getforpatient",{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "applicaiotn/json"
+      },
+      credentials: "include"
+    });
+    const data = await response.json();
+    if(response.status === 200){
+      setAppointmentData(data);
+    }else{
+      setAppointmentData([]);
+    }
+  }
+
+
   useEffect(() => {
     fetchPatientData();
-    // fetchAppointments();
+    fetchAppointments();
   }, []);
 
 
@@ -51,6 +70,7 @@ const Appointments = () => {
     { id: "hospitalName", label: "Hospital Name" },
     { id: "hospitalEmail", label: "Hospital Email" },
     { id: "hospitalPhone", label: "Hospital Phone" },
+    { id: "appointmentStatus", label: "Appointment Status" },
     { id: "time", label: "Time" }
   ]
 
@@ -66,7 +86,7 @@ const Appointments = () => {
   }
 
   const recordAfterPagination = () => {
-    return (patientData.appointments.slice(page * rowsPerPages, (page + 1) * rowsPerPages))
+    return (appointmentData.slice(page * rowsPerPages, (page + 1) * rowsPerPages))
   }
 
   return (
@@ -76,7 +96,7 @@ const Appointments = () => {
           <Typography variant="h3" component="h1">Your Appointments</Typography>
 
           {
-            patientData.appointments !== undefined && patientData.appointments.length ?
+            appointmentData !== undefined && appointmentData.length ?
               (
                 <>
                   <Table className={classes.table}>
@@ -87,7 +107,10 @@ const Appointments = () => {
                           <TableRow key={ele._id}>
                             <TableCell>{idx + 1}</TableCell>
                             <TableCell>{ele.hospitalName}</TableCell>
-                            <TableCell>{new Date(ele.time).toLocaleString()}</TableCell>
+                            <TableCell>{ele.hospitalEmail}</TableCell>
+                            <TableCell>{ele.hospitalPhone}</TableCell>
+                            <TableCell>{ele.appointmentStatus}</TableCell>
+                            <TableCell>{new Date(ele.appointmentTime).toLocaleString()}</TableCell>
                           </TableRow>
                         ))
                       }
