@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 const Hospital = require('../models/hospitalModel');
 const Patient = require('../models/patientModel');
 const Staff = require('../models/staffModel');
-
+const AuthenticateHospital = require("../middleware/AuthenticateHospital")
 // Hospital Signup
 // Post request for store Hispital data to database 
 router.post('/signup', async (req, res) => {
@@ -42,24 +42,24 @@ router.post('/login', async (req, res) => {
         if (!email || !password) {
             throw new Error("Please Fill all the field");
         }
-        const result = await Hospital.findOne({ email: email }); 
-        if (result){
-            const isMatch = await bcrypt.compare(password,result.password);
-            if(isMatch){
+        const result = await Hospital.findOne({ email: email });
+        if (result) {
+            const isMatch = await bcrypt.compare(password, result.password);
+            if (isMatch) {
                 const token = await result.getAuthenticationToken();
                 // console.log(token);
                 res.cookie("jwtToken", token, {
                     expires: new Date(Date.now() + 86400000),
                     httpOnly: true,
                 })
-                res.json({msg: "Login successfull"});
+                res.json({ msg: "Login successfull" });
             }
-            else{
-                res.status(400).json({msg: "Invalid Credential"});
+            else {
+                res.status(400).json({ msg: "Invalid Credential" });
             }
         }
         else
-            res.status(403).json({msg: "Hospital is not registerd"});
+            res.status(403).json({ msg: "Hospital is not registerd" });
 
     }
     catch (err) {
@@ -77,7 +77,7 @@ router.get('/', async (req, res) => {
             query[key] = new RegExp(query[key], 'i');
             if (key === "password") query[key] = undefined;
         }
-        const result = await Hospital.find(query, { "departments._id": 0, date: 0, __v: 0, password: 0 ,tokens: 0});
+        const result = await Hospital.find(query, { "departments._id": 0, date: 0, __v: 0, password: 0, tokens: 0 });
         if (result.length !== 0) res.status(200).json(result);
         else res.status(403).json({ message: "No data found" });
     }
@@ -134,5 +134,21 @@ router.delete('/:hospitalId', async (req, res) => {
     }
 });
 
+router.get("/authenticate", AuthenticateHospital, async (req, res) => {
+    res.send(req.HospitalDetail)
+})
 
+router.get("/getpatient", AuthenticateHospital, async (req, res) => {
+    try {
+        console.log("request come");
+        const hospitalId = req.id;
+        const result = await Patient.find({ appointments: { $elemMatch: { hospitalId: hospitalId } } },{password: 0,tokens: 0,__v:0});
+        if (result) res.json(result);
+        else res.status(403).json({ msg: "Record is not found" });
+    }
+    catch (err) {
+        res.status(400).json(err.toString())
+        console.log("Error in get PAtient Hospital Appointment", err);
+    }
+})
 module.exports = router;

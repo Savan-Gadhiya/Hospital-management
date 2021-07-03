@@ -35,8 +35,8 @@ const NavBar = () => {
                   Signup
                 </span>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><Link className="dropdown-item" to="/patient/login">Signup as Patient</Link></li>
-                  <li><Link className="dropdown-item" to="/hospital/login">Signup as Hospital</Link></li>
+                  <li><Link className="dropdown-item" to="/patient/signup">Signup as Patient</Link></li>
+                  <li><Link className="dropdown-item" to="/hospital/signup">Signup as Hospital</Link></li>
                 </ul>
               </li>
             </ul>

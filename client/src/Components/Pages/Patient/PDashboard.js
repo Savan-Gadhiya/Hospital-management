@@ -24,7 +24,7 @@ const PDashboard = () => {
                 isLoggedin ?
                     (<Switch>
                         <Route exact path="/dashboard/patient"> <DashboardMain /> </Route>
-                        <Route path="/dashboard/patient/appoinments"> <Appointments /> </Route>
+                        <Route path="/dashboard/patient/appointments"> <Appointments /> </Route>
                         <Route path="/dashboard/patient/newappoinment"> <NewAppoinment /> </Route>
                         <Redirect to='/dashboard/patient' />
                     </Switch>

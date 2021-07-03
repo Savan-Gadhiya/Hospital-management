@@ -60,14 +60,14 @@ const SideBar = () => {
 
   const patientArr = [
     { name: "Dashboard", icon: <DashboardIcon />, path: "/dashboard/patient" },
-    { name: "Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/patient/appoinments" },
+    { name: "Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/patient/appointments" },
     { name: "New Appoinment", icon: <TouchAppRoundedIcon />, path: "/dashboard/patient/newappoinment" },
     // { name: "All Hospitals", icon: <LocalHospitalIcon />, path: "/dashboard/patient/allHospitals" },
   ]
   const HospitalArr = [
     { name: "Dashboard", icon: <DashboardIcon />, path: "/dashboard/hospital" },
     { name: "Add New Employee", icon: <PersonAddIcon />, path: "/dashboard/hospital/addemployee" },
-    { name: "Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/hospital/appoinments" },
+    { name: "Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/hospital/appointments" },
     { name: "All Employee", icon: <SupervisorAccountIcon />, path: "/dashboard/hospital/allemployee" },
   ]
   return (

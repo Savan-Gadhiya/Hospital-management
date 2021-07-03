@@ -4,8 +4,8 @@ const Card = (props) => {
     return (
         <>
             <div className={`card blue-bg ${props.className}`}>
-                <h2 className="title">{props.title}</h2>
-                <h4 className="value">{props.value}</h4>
+                <h3 className="title">{props.title}</h3>
+                <h3 className="value">{props.value}</h3>
             </div>
         </>
     )

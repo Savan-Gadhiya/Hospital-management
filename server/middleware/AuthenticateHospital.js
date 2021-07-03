@@ -3,7 +3,7 @@ const Hospital  = require("../models/hospitalModel");
 
 const HospitalAuthenticate = async (req,res,next) => {
     try{
-        // console.log("REquest come");
+        console.log("REquest come for hospital ");
         const token = req.cookies.jwtToken;
         const id = jwt.verify(token,process.env.SECRET_KEY).id;
         const result = await Hospital.findOne({_id: id});

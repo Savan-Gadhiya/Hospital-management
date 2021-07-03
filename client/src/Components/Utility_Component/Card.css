@@ -1,21 +1,48 @@
-.card{
-    padding: 10px;
-    margin: 10px;
-    box-shadow: 1px 1px 3px 1px #999;
-    width: 300px;
+.card {
+	padding: 10px;
+	margin: 10px;
+	box-shadow: 1px 1px 3px 1px #999;
+	width: 300px;
 }
-.blue-bg{
-    background-color: rgb(222, 241, 247);
+.value {
+	font-weight: 400;
+    color: #444;
+    text-align: center;
 }
-.green-bg{
-    background-color: rgb(208, 247, 208);
+.title {
+    font-weight: 400;
+    color: #222;
+    text-align: center;
 }
-.pink-bg{
+.blue-bg {
+	background-color: rgb(222, 241, 247);
+    /* background: #5a162b;  
+    background: -webkit-linear-gradient(to right, #1D2671, #360313);  
+    background: linear-gradient(to right, #1D2671, #C33764); 
+    background: #5a162b;  
+    background: -webkit-linear-gradient(to bottom, #1D2671, #c94b4b);  
+    background: linear-gradient(to bottom, #4b134f, #c94b4b);  */
+
+}
+.green-bg {
+	background-color: rgb(208, 247, 208);
+    /* background: #C04848;  
+    background: -webkit-linear-gradient(to bottom, #480048, #C04848);  
+    background: linear-gradient(to bottom, #480048, #C04848);  */
+
+}
+.pink-bg {
     background-color: rgb(255, 222, 227);
+    /* background: #AA076B;  
+    background: -webkit-linear-gradient(to bottom, #61045F, #AA076B);  
+    background: linear-gradient(to bottom, #61045F, #AA076B);  */
+    
+
 }
 .title{
-    color: #222;
+    font-size: 28px;
 }
-.value{
-    color: #444
-}
+
+/* .green-bg .title,.green-bg .value,.blue-bg .title,.blue-bg .value{
+    color: #efefef
+} */

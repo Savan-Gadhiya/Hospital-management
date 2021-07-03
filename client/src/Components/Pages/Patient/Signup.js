@@ -226,7 +226,8 @@ const Signup = () => {
                 format="dd MMMM yyyy"
                 margin="normal"
                 id="date-picker-inline"
-                label="Date picker inline"
+                label="Date of Birth"
+                name="dob"
                 value={values.dob}
                 onChange={(date) => { handleInputChange(convertDateToDefEventPara("dob", date)); }}
                 KeyboardButtonProps={{
