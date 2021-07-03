@@ -10,6 +10,7 @@ router.get("/test",(req,res) => {
 router.use("/api/hospital",require("./HospitalRoute"));
 router.use("/api/patient",require("./PatientRoute"));
 router.use("/api/staff",require("./StaffRoute"));
+router.use("/api/appointment",require("./appointmentRoute"));
 
 // router.use("/api/about",authenticatPatient,(req,res) => {
 //     res.json(req.PatientDetail);

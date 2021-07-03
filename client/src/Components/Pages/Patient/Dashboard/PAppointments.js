@@ -42,12 +42,15 @@ const Appointments = () => {
   }
   useEffect(() => {
     fetchPatientData();
+    // fetchAppointments();
   }, []);
 
 
   const TableHeadCell = [
     { id: "sr.no", label: "Sr.No" },
     { id: "hospitalName", label: "Hospital Name" },
+    { id: "hospitalEmail", label: "Hospital Email" },
+    { id: "hospitalPhone", label: "Hospital Phone" },
     { id: "time", label: "Time" }
   ]
 

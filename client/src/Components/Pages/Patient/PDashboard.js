@@ -3,7 +3,7 @@ import { Switch, Route,Redirect } from 'react-router';
 import DashboardMain from './Dashboard/DashboardMain';
 import NewAppoinment from './Dashboard/NewAppoinment';
 import { getPatientData } from '../../Utility_Component/Utility functions';
-import Appointments from './Dashboard/Appointments';
+import PAppointments from './Dashboard/PAppointments';
 const PDashboard = () => {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [patientData, setPatientData] = useState({});
@@ -24,7 +24,7 @@ const PDashboard = () => {
                 isLoggedin ?
                     (<Switch>
                         <Route exact path="/dashboard/patient"> <DashboardMain /> </Route>
-                        <Route path="/dashboard/patient/appointments"> <Appointments /> </Route>
+                        <Route path="/dashboard/patient/appointments"> <PAppointments /> </Route>
                         <Route path="/dashboard/patient/newappoinment"> <NewAppoinment /> </Route>
                         <Redirect to='/dashboard/patient' />
                     </Switch>
