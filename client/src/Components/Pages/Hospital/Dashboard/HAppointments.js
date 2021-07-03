@@ -24,7 +24,7 @@ const useStyle = makeStyles((theme) => ({
 }))
 
 const HAppointment = () => {
-  const [AllpatientData, setAllPatientData] = useState([]);
+  const [allAppointmentData, setAllAppointmentData] = useState([]);
   const [HospitalData, setHospitalData] = useState({});
   const classes = useStyle();
   const history = useHistory();
@@ -46,9 +46,9 @@ const HAppointment = () => {
     }
   }
   // Fetch All Patient Data who contain appointmant with a loggedin hospital
-  const fetchAllPatient = async () => {
+  const fetchAllAppointment = async () => {
     try {
-      const response = await fetch("/api/hospital/getpatient", {
+      const response = await fetch("/api/appointment/getforhospital", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -59,10 +59,7 @@ const HAppointment = () => {
       const data = await response.json();
       if (response.status === 200) {
 
-        // const HospitalAppointment = data.appointments.filter((ele) => ele.hospitalId === HospitalData._id);
-        // console.log(HospitalAppointment);
-
-        setAllPatientData(data);
+        setAllAppointmentData(data);
 
       }
       else {
@@ -78,7 +75,7 @@ const HAppointment = () => {
 
   useEffect(() => {
     fetchHospitalData();
-    fetchAllPatient();
+    fetchAllAppointment();
   }, []);
 
   const TableHeadCell = [
@@ -107,38 +104,25 @@ const HAppointment = () => {
         <Paper style={{ margin: '10px', padding: "10px" }}>
           <Typography variant="h3" component="h1">Appointments</Typography>
           {
-            AllpatientData !== undefined && AllpatientData.length ?
+            allAppointmentData !== undefined && allAppointmentData.length ?
               (
                 <>
                   <Table className={classes.table}>
                     <THead TableHeadCell={TableHeadCell} />
                     <TableBody>
                       {
-                        AllpatientData.map((patient, index) => (
-                            <>
-                              {
-                                patient.appointments.map((ele, idx) => {
-                                  if (ele.hospitalId === HospitalData._id) {
-                                    return (
-                                      <>
-                                        <TableRow key={ele._id}>
-                                          <TableCell>{++idxCounter}</TableCell>
-                                          <TableCell>{patient.name}</TableCell>
-                                          <TableCell>{patient.email}</TableCell>
-                                          <TableCell>{patient.phone}</TableCell>
-                                          <TableCell>{new Date(ele.time).toLocaleString()}</TableCell>
-                                          {/* <TableCell>{new Date(patient.time).toLocaleString()}</TableCell> */}
-                                        </TableRow>
-                                      </>
-                                    )
-                                  }
-                                })}
-                            </>
-                          )
-                          // {
-
-
-                          // }
+                        allAppointmentData.map((appointment, index) => (
+                          <>
+                            <TableRow key={appointment._id}>
+                              <TableCell>{index + 1}</TableCell>
+                              <TableCell>{appointment.patientName}</TableCell>
+                              <TableCell>{appointment.patientEmail}</TableCell>
+                              <TableCell>{appointment.patientPhone}</TableCell>
+                              <TableCell>{new Date(appointment.appointmentTime).toLocaleString()}</TableCell>
+                              {/* <TableCell>{new Date(appointment.time).toLocaleString()}</TableCell> */}
+                            </TableRow>
+                          </>
+                        )
                         )
                       }
                     </TableBody>

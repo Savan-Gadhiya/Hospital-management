@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const AuthenticatePatient = require("../middleware/AuthenticatePatient");
+const AuthenticateHospital = require("../middleware/AuthenticateHospital");
 const Appointment = require("../models/appointmentModel");
 const Hospital = require("../models/hospitalModel");
 
@@ -39,11 +40,28 @@ router.post('/bookappointment', AuthenticatePatient, async (req, res) => {
 
 })
 
-// Display a appointment
+// Display a appointment for patient
 router.get('/getforpatient',AuthenticatePatient,async (req,res) => {
     try{
         // const {...other} = req.body;
         const result = await Appointment.find({patientId: req.id},{__v:0,patientName: 0,patientEmail: 0,patientPhone: 0});
+        if(result){
+            res.status(200).json(result);
+        }
+        else{
+            res.status(500).json("Something want to wrong");
+        }
+    }
+    catch(err){
+        console.log("Error while displaying appointment");
+        res.status(400).json({msg: err.toString()});
+    }
+})
+// Display appointment for hospital
+router.get('/getforhospital',AuthenticateHospital,async (req,res) => {
+    try{
+        // const {...other} = req.body;
+        const result = await Appointment.find({hospitalId: req.id},{__v:0,hospitalName: 0,hospitalEmail: 0,hospitalPhone: 0});
         if(result){
             res.status(200).json(result);
         }
