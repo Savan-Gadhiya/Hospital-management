@@ -1,9 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Paper, Typography, TextField, Grid, Button, RadioGroup, Radio, FormControl, FormControlLabel, FormLabel, MenuItem } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import useDefaultStyle from '../../Form_Component/FormStyle'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import ShowAlert from '../../Form_Component/ShowAlert';
+
+const convertAutoCompleteToDefaultInputValue = (name, value) => {
+  console.log(value);
+  // if (value) {
+    return {
+      target: {
+        name: name,
+        value: value.name, // This is a name of employee
+        id: value._id
+      }
+    }
+
+  // }
+}
 
 const initalValue = {
   name: "",
@@ -14,6 +29,7 @@ const initalValue = {
   role: "",
   hospitalId: "",
   departmentId: "",
+  departmentName: "",
   salary: "",
   address: {
     address1: "",
@@ -50,7 +66,7 @@ const AddEmployee = () => {
     if (response.status === 200) {
       setHospitalDetail(data);
       // console.log('HospitalDetail = ',data);
-      setValues({...values,hospitalId : data._id});
+      setValues({ ...values, hospitalId: data._id });
     }
     else {
       setHospitalDetail({ msg: "Something want to wrong" });
@@ -64,7 +80,9 @@ const AddEmployee = () => {
   // for handaling input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
+    console.log(e.target);
+    if (name === "departmentId") setValues({ ...values, [name]: e.target.id, departmentName: e.target.value });
+    else setValues({ ...values, [name]: value });
     validate({ [name]: value });
   };
 
@@ -120,7 +138,6 @@ const AddEmployee = () => {
       temp.salary = (fieldValue.salary >= 0 && fieldValue.salary !== "") ? "" : "Invalid Salary Value";
     setErrors({ ...temp });
 
-
     if (fieldValue === values) {
       return Object.values(temp).every((val) => val === "");
     }
@@ -133,7 +150,7 @@ const AddEmployee = () => {
     setValues(initalValue);
     setErrors({});
     // setIsSuccess(false);
-    setIsError({error: false, errorMsg: ""});
+    setIsError({ error: false, errorMsg: "" });
   }
 
   // Submit form
@@ -171,7 +188,7 @@ const AddEmployee = () => {
     else {
       setIsError({ error: true, errorMsg: "Please Fill all the field properly" });
     }
-    console.log("IN submit ,",errors);
+    console.log("IN submit ,", errors);
   };
 
 
@@ -181,7 +198,7 @@ const AddEmployee = () => {
         <Paper className={DefaultClasses.paperStyle}>
           {/* Alert */}
           {
-            isSuccess && (<ShowAlert title="Success" description="Your account created successfully" className={DefaultClasses.alert}/>)
+            isSuccess && (<ShowAlert title="Success" description="Employee Added Successfully" className={DefaultClasses.alert} />)
           }
           {
             isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
@@ -284,7 +301,6 @@ const AddEmployee = () => {
                   value={values.address.city}
                   onChange={handleAddressChange}
                   {...(errors.city && { error: true, helperText: errors.city })}
-
                   fullWidth
                 />
               </Grid>
@@ -328,7 +344,6 @@ const AddEmployee = () => {
                   value={values.address.pincode}
                   onChange={handleAddressChange}
                   {...(errors.pincode && { error: true, helperText: errors.pincode })}
-
                   fullWidth
                 />
               </Grid>
@@ -345,26 +360,14 @@ const AddEmployee = () => {
               fullWidth
             />
             {/* Department name */}
-            <TextField
-              select
-              name="departmentId"
-              label="Select a Depatrment Name"
-              value={values.departmentId}
-              onChange={handleInputChange}
-              margin="normal"
-              {...(errors.departmentId && {error: true,helperText: errors.departmentId})}
-              fullWidth
-              >
-              {
-                HospitalDetail.departments ? HospitalDetail.departments.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    {option.name}
-                  </MenuItem>
-                )) : <MenuItem value="">
-                  -- Select the department --
-                </MenuItem>
-              }
-            </TextField>
+            <Autocomplete
+              options={HospitalDetail.departments}
+              getOptionLabel={(option) => option.name}
+              onChange={(e, value) => { handleInputChange(convertAutoCompleteToDefaultInputValue("departmentId", value)) }}
+              renderInput={(params) => <TextField {...params} label="Select a Depatrment Name" variant="standard" margin="normal" fullWidth {...(errors.departmentId && { error: true, helperText: errors.departmentId })} />}
+            />
+
+
 
             {/* Salary */}
             <TextField
@@ -398,4 +401,4 @@ const AddEmployee = () => {
   )
 }
 
-export default AddEmployee
+export default AddEmployee;

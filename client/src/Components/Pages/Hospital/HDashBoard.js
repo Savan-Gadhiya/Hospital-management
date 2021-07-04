@@ -6,19 +6,10 @@ import DashboardMain from './Dashboard/DashboardMain';
 import HAppointments from './Dashboard/HAppointments';
 import { getHospitalData } from '../../Utility_Component/Utility functions';
 import HAllAppointment from './Dashboard/HAllAppointment';
+import DisplayAllStaff from '../Staff/DisplayAllStaff';
 const HDashBoard = () => {
   const [isLoggedin,setIsLoggedin] = useState(false);
   const [HoapitalData,setHoapitalData] = useState({});
-  const Appointment = () => {
-    return (
-      <h1>Appintmentds</h1>
-    )
-  }
-  const AllEmp = () => {
-    return (
-      <h1>All emps</h1>
-    )
-  }
   const fetchHospitalData = async () => {
     const response = await getHospitalData();
     console.log(response);
@@ -45,7 +36,7 @@ const HDashBoard = () => {
               <Route path="/dashboard/hospital/appointments"> <HAppointments /> </Route>
               <Route path="/dashboard/hospital/allappointments"> <HAllAppointment /> </Route>
               <Route path="/dashboard/hospital/addemployee"> <AddEmployee /> </Route>
-              <Route path="/dashboard/hospital/allemployee"> <AllEmp />  </Route>
+              <Route path="/dashboard/hospital/allemployee"> <DisplayAllStaff />  </Route>
             </Switch> 
             ) : <h1>You need to login for access this page</h1>
         }

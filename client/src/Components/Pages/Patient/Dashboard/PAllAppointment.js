@@ -7,7 +7,6 @@ import GiveAppointmentIcon from '../../../Utility_Component/GiveAppointmentIcon'
 const PAllAppointment = () => {
   const [patientData, setPatientData] = useState({});
   const history = useHistory();
-
   // Fetch Patient Data which is loggedin
   const fetchPatientData = async () => {
     const response = await getPatientData();
@@ -37,14 +36,14 @@ const PAllAppointment = () => {
     { id: "appoitmentTime", label: "Appoitment Time" },
     { id: "status", label: "Status" },
   ];
-  const renderTableBodyForPatient = (valuesArr) => {
+  const renderTableBodyForPatient = (valuesArr,page,rowsPerPages) => {
     console.log("Value Arr = ",valuesArr)
     return (
       valuesArr.map((appointment, index) => {
         return (
           <>
             <TableRow key={appointment._id}>
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{page*rowsPerPages + index + 1}</TableCell>
               <TableCell>{appointment.hospitalName} <br /> {appointment.hospitalEmail} <br />{appointment.hospitalPhone}</TableCell>
               {
                 appointment.appointmentStatus === "close" ?

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, Container, IconButton, Paper, Table, TableRow, TableCell, TableBody, makeStyles, TablePagination } from '@material-ui/core';
-import { getHospitalData } from '../../Utility_Component/Utility functions';
 import THead from '../../Utility_Component/TableHead';
 import { useHistory } from "react-router-dom";
-import EditIcon from '@material-ui/icons/Edit';
 import useTableStyle from '../../Utility_Component/TableStyle';
-import GiveAppointmentIcon from '../../Utility_Component/GiveAppointmentIcon';
 
 
 const useStyles = makeStyles(theme => ({
@@ -13,7 +10,6 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: "10px"
   }
 }))
-
 
 const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
   const [allAppointmentData, setAllAppointmentData] = useState([]);
@@ -68,7 +64,6 @@ const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
     setPage(0);
   }
   const recordAfterPagination = () => {
-    console.log(allAppointmentData.slice(page * rowsPerPages, (page + 1) * rowsPerPages))
     return (allAppointmentData.slice(page * rowsPerPages, (page + 1) * rowsPerPages))
   }
 
@@ -87,46 +82,7 @@ const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
                   <Table className={defaultClasses.table}>
                     <THead TableHeadCell={TableHeadCell} />
                     <TableBody>
-                      {renderTableBody(recordAfterPagination())}
-                        {/* recordAfterPagination().map((appointment, index) => (
-                          <>
-                            <TableRow key={appointment._id}>
-                              <TableCell>{index + 1}</TableCell>
-                              <TableCell>{appointment.patientName} <br /> {appointment.patientEmail} <br />{appointment.patientPhone}</TableCell>
-                              {/* <TableCell>{appointment.appointmentStatus}</TableCell> * /}
-                              {
-                                appointment.appointmentStatus === "close" ?
-                                  (
-                                    <>
-                                      <TableCell>{appointment.medicalStatus}</TableCell>
-                                      <TableCell>{appointment.remarks}</TableCell>
-                                      <TableCell>{appointment.staffName}</TableCell>
-                                      <TableCell style={{paddingLeft: "5px"}}>
-                                        <ul>
-                                          {
-                                          appointment.medicine.map((ele, idx) => {
-                                              return ele ? <li key={idx}>{ele}</li> : "-"
-                                            })
-                                          }
-                                        </ul>
-                                      </TableCell>
-                                    </>
-                                  )
-                                  :
-                                  (
-                                    <>
-                                      <TableCell> - </TableCell>
-                                      <TableCell> - </TableCell>
-                                      <TableCell> - </TableCell>
-                                      <TableCell> - </TableCell>
-                                    </>
-                                  )
-                              } 
-                              
-                            </TableRow>
-                          </>
-                        )
-                        )*/}
+                      {renderTableBody(recordAfterPagination(),page,rowsPerPages)}
                     </TableBody>
                   </Table>
                   <TablePagination

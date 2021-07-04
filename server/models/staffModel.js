@@ -24,7 +24,8 @@ const StaffSchema = new mongoose.Schema({
         require: true
     },
     address: {
-        street: String,
+        address1: String,
+        address2: String,
         city: String,
         pincode: Number,
         state: String,
@@ -43,6 +44,7 @@ const StaffSchema = new mongoose.Schema({
         type: String,
         require: true   
     },
+    departmentName: String,
     salary: {
         type: Number,
         require: true
