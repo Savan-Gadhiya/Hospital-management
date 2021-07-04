@@ -4,8 +4,8 @@ import { getPatientData } from '../../../Utility_Component/Utility functions';
 import THead from '../../../Utility_Component/TableHead';
 import useTableStyle from '../../../Utility_Component/TableStyle';
 
-const Appointments = () => {
-  const [patientData, setPatientData] = useState({});
+const Appointments = ({patientData}) => {
+  // const [patientData, setPatientData] = useState({});
   const [appointmentData, setAppointmentData] = useState([]);
   const classes = useTableStyle();
 
@@ -13,15 +13,6 @@ const Appointments = () => {
   const pagesOption = [5, 10, 25, 50];
   const [page, setPage] = useState(0);
   const [rowsPerPages, setRowsPerPages] = useState(pagesOption[page]);
-
-  const fetchPatientData = async () => {
-    const response = await getPatientData();
-    // console.log(response.data);
-    if (response.status === 200) {
-      setPatientData(response.data);
-    }
-
-  }
 
   const fetchAppointments = async () => {
     const response = await fetch("/api/appointment/getforpatient",{
@@ -42,7 +33,7 @@ const Appointments = () => {
 
 
   useEffect(() => {
-    fetchPatientData();
+    // fetchPatientData();
     fetchAppointments();
   }, []);
 
@@ -75,8 +66,7 @@ const Appointments = () => {
     <>
       <Container>
         <Paper style={{ margin: '10px', padding: "10px" }}>
-          <Typography variant="h3" component="h1">Your Appointments</Typography>
-
+          <Typography variant="h4" component="h2">Your Appointments</Typography>
           {
             appointmentData !== undefined && appointmentData.length ?
               (
@@ -103,7 +93,7 @@ const Appointments = () => {
                     page={page}
                     rowsPerPageOptions={pagesOption}
                     rowsPerPage={rowsPerPages}
-                    count={patientData.appointments.length}
+                    count={appointmentData.length}
                     onChangeRowsPerPage={handleChangeRowParPage}
                     onChangePage={handleChnagePage}
                   />

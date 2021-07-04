@@ -25,7 +25,7 @@ const PDashboard = () => {
                     (<Switch>
                         <Route exact path="/dashboard/patient"> <DashboardMain /> </Route>
                         <Route path="/dashboard/patient/appointments"> <PAppointments /> </Route>
-                        <Route path="/dashboard/patient/newappoinment"> <NewAppoinment /> </Route>
+                        <Route path="/dashboard/patient/newappoinments"> <NewAppoinment /> </Route>
                         <Redirect to='/dashboard/patient' />
                     </Switch>
                     ) : <h1>You need to login for access this page</h1>

@@ -60,8 +60,8 @@ const SideBar = () => {
 
   const patientArr = [
     { name: "Dashboard", icon: <DashboardIcon />, path: "/dashboard/patient" },
-    { name: "Open Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/patient/appointments" },
-    { name: "New Appoinment", icon: <TouchAppRoundedIcon />, path: "/dashboard/patient/newappoinment" },
+    { name: "All Appoinments", icon: <AccessTimeRoundedIcon />, path: "/dashboard/patient/appointments" },
+    { name: "New Appoinment", icon: <TouchAppRoundedIcon />, path: "/dashboard/patient/newappoinments" },
     // { name: "All Hospitals", icon: <LocalHospitalIcon />, path: "/dashboard/patient/allHospitals" },
   ]
   const HospitalArr = [

@@ -44,21 +44,6 @@ const PatientSchema = new mongoose.Schema({
             type: String
         }
     ],
-    medicalRecord: [
-        {
-            record: String,
-            status: String,
-            date: Date,
-        }
-    ],
-    appointments:[
-        {
-            hospitalId: String,
-            hospitalName: String,
-            time: Date,
-            remarks: String,
-        }
-    ],
     date: {
         type: Date,
         default: Date.now
