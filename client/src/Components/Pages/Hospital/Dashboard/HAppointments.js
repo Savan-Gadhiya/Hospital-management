@@ -6,25 +6,19 @@ import { useHistory } from "react-router-dom";
 import EditIcon from '@material-ui/icons/Edit';
 import PopPopDialogBox from './AppointmentEditDialog';
 import UpdateAppointmentForm from './UpdateAppointmentForm';
-// import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutlined';
-// import { green } from '@material-ui/core/colors';
-// <CheckCircleOutlinedIcon style={{ color: green[500] }} />
+import useTableStyle from "../../../Utility_Component/TableStyle"
+import ShowAlert from '../../../Form_Component/ShowAlert';
 
-const useStyle = makeStyles((theme) => ({
-  table: {
-    marginTop: theme.spacing(3),
-    "& thead th": {
-      fontWeight: "600",
-      backgroundColor: "#d5d9f0"
-    },
-    "& tbody td": {
-      fontWeight: "400",
-    },
-    "& tbody tr:hover": {
-      backgroundColor: "#f2f4fb"
-    }
-  }
-}))
+const InitalUpdateValue = {
+  name: "",
+  email: "",
+  staffName: "",
+  staffId: "",
+  remarks: "",
+  medicalStatus: "",
+  medicine: "",
+  medicineArr: ""
+}
 
 const HAppointment = () => {
   const [allAppointmentData, setAllAppointmentData] = useState([]);
@@ -33,18 +27,11 @@ const HAppointment = () => {
   const [HospitalData, setHospitalData] = useState({});
   const [appointmentId, setAppointmentId] = useState(""); // This will contain a value of appointment id which is clicked for edits
   const [openModal, setOpenModal] = useState(false);
-  const classes = useStyle();
+  const classes = useTableStyle();
   const history = useHistory();
-  const [updateAppointment, setUpdateAppointment] = useState({
-    name: "",
-    email: "",
-    staffName: "",
-    staffId: "",
-    remarks: "",
-    medicalStatus: "",
-    medicine: "",
-    medicineArr: ""
-  })
+  const [updateAppointment, setUpdateAppointment] = useState(InitalUpdateValue);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState({ error: false, errorMsg: "" });
 
   // for pagination
   const pagesOption = [5, 10, 25, 50];
@@ -73,7 +60,7 @@ const HAppointment = () => {
           Accept: "application/json"
         },
         credentials: "include",
-        body: JSON.stringify({appointmentStatus: "open"})
+        body: JSON.stringify({ appointmentStatus: "open" })
       });
       const data = await response.json();
       if (response.status === 200) {
@@ -126,7 +113,6 @@ const HAppointment = () => {
   const handleChangePage = (e, newPage) => {
     setPage(newPage);
   }
-
   const handleChangeRowParPage = (e) => {
     const { name, value } = e.target;
     setRowsPerPages(value);
@@ -134,7 +120,6 @@ const HAppointment = () => {
   }
 
   // Update value
-
   const validateUpdate = (fieldValue = updateAppointment) => {
     const temp = { ...errors };
     if ("staffName" in fieldValue)
@@ -147,7 +132,7 @@ const HAppointment = () => {
   }
 
   const handleUpdateChange = (e) => {
-    if(!e)  return;// jo e ma kai value nahi hoy to direct return kariyu aa combo input mathi jaya value add kari ne kadhi nakhashe tayare error aavashe
+    if (!e) return;// jo e ma kai value nahi hoy to direct return kariyu aa combo input mathi jaya value add kari ne kadhi nakhashe tayare error aavashe
     const { name, value } = e.target;
     if (name === "medicine") {
       const medicineArr = value.split(",");
@@ -161,7 +146,7 @@ const HAppointment = () => {
   const SubmitUpdatedAppointment = async () => {
     try {
       if (validateUpdate()) {
-        setOpenModal(true);
+        setOpenModal(false);
         console.log(errors)
         const response = await fetch(`/api/appointment/${appointmentId}`, {
           method: "PATCH",
@@ -175,8 +160,10 @@ const HAppointment = () => {
         const data = await response.json();
         if (response.status === 200) {
           // console.log(data);
-          setUpdateAppointment({ name: "", email: "", staffName: "", staffId: "", remarks: "", medicalStatus: "", medicine: "", medicineArr: "" }) // Clear all fields
-          setErrors();
+          console.log(updateAppointment);
+          setUpdateAppointment(InitalUpdateValue) // Clear all fields
+          setErrors({});
+          setIsSuccess(true);
         }
         else {
           console.log("Appointment not updated get response with other than 200 status code")
@@ -186,16 +173,22 @@ const HAppointment = () => {
 
     }
     catch (err) {
-      console.log("Error while updating appointment")
+      console.log("Error while updating appointment", err)
     }
   }
 
   return (
     <>
       <Container>
+        {
+          isSuccess && (<ShowAlert title="Success" description="Appointment updated successfully" />)
+        }
+        {
+          isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
+        }
         {/* This will open a update appointment Pop Pop box */}
         <PopPopDialogBox open={openModal} setOpen={setOpenModal} title="Update Appointment" onClickOnSaveChange={SubmitUpdatedAppointment}>
-          <UpdateAppointmentForm onChange={handleUpdateChange} values={updateAppointment} allEmployee={allEmployee} errors={errors}/>
+          <UpdateAppointmentForm onChange={handleUpdateChange} values={updateAppointment} allEmployee={allEmployee} errors={errors} />
         </PopPopDialogBox>
         <Paper style={{ margin: '10px', padding: "10px" }}>
 
@@ -240,7 +233,7 @@ const HAppointment = () => {
                     onChangePage={handleChangePage}
                   />
                 </>
-              ) : "You not Book any appointment"
+              ) : <Typography component="p" style={{ margin: "20px 0px" }}>You not have any padding appointment at this time</Typography>
           }
         </Paper>
       </Container>

@@ -5,6 +5,7 @@ import AddEmployee from '../Staff/AddStaff';
 import DashboardMain from './Dashboard/DashboardMain';
 import HAppointments from './Dashboard/HAppointments';
 import { getHospitalData } from '../../Utility_Component/Utility functions';
+import AllAppointments from './Dashboard/AllAppointments';
 const HDashBoard = () => {
   const [isLoggedin,setIsLoggedin] = useState(false);
   const [HoapitalData,setHoapitalData] = useState({});
@@ -42,6 +43,7 @@ const HDashBoard = () => {
             (<Switch>
               <Route exact path="/dashboard/hospital"> <DashboardMain /> </Route>
               <Route path="/dashboard/hospital/appointments"> <HAppointments /> </Route>
+              <Route path="/dashboard/hospital/allappointments"> <AllAppointments /> </Route>
               <Route path="/dashboard/hospital/addemployee"> <AddEmployee /> </Route>
               <Route path="/dashboard/hospital/allemployee"> <AllEmp />  </Route>
             </Switch> 

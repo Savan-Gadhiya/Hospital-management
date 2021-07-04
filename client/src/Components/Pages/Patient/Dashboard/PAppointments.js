@@ -2,30 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Typography, Container, Paper, Table, TableRow, TableCell, TableBody, makeStyles, TablePagination } from '@material-ui/core';
 import { getPatientData } from '../../../Utility_Component/Utility functions';
 import THead from '../../../Utility_Component/TableHead';
-
-const useStyle = makeStyles((theme) => ({
-  table: {
-    marginTop: theme.spacing(3),
-    "& thead th": {
-      fontWeight: "600",
-      // color: theme.palette.primary.main,
-      backgroundColor: "#d5d9f0"
-      // color: theme.palette.primary.main,
-      // background: theme.palette.primary.light
-    },
-    "& tbody td": {
-      fontWeight: "400",
-    },
-    "& tbody tr:hover": {
-      backgroundColor: "#f2f4fb"
-    }
-  }
-}))
+import useTableStyle from '../../../Utility_Component/TableStyle';
 
 const Appointments = () => {
   const [patientData, setPatientData] = useState({});
   const [appointmentData, setAppointmentData] = useState([]);
-  const classes = useStyle();
+  const classes = useTableStyle();
 
   // for pagination
   const pagesOption = [5, 10, 25, 50];

@@ -10,11 +10,12 @@ const useStyle = makeStyles((theme) => ({
         justifyContent: "center",
         flexDirection: "column",
         minHeight: "100vh",
+        width: "100%"
     },
     paperStyle: {
         width: "60%",
         padding: `${theme.spacing(1)}px ${theme.spacing(3)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
-        margin: `${theme.spacing(5)}px 0px`,
+        margin: `${theme.spacing(5)}px auto`,
     },
     heading: {
         margin: `${theme.spacing(2)}px 0px`,

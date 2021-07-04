@@ -9,9 +9,12 @@ const Hospital = require("../models/hospitalModel");
 router.post('/bookappointment', AuthenticatePatient, async (req, res) => {
     try {
         const patientId = req.id;
-        console.log(req.body);
+        // console.log(req.body);
         // const appointmentStatus = "open";
-        const { hospitalId, appointmentTime, hospitalName, hospitalEmail, hospitalPhone, patientName, patientEmail, patientPhone } = req.body;
+        const appointmentTime = Date.parse(req.body.appointmentTime);
+        // console.log("appointmentTime = ",appointmentTime);
+        const { hospitalId, hospitalName, hospitalEmail, hospitalPhone, patientName, patientEmail, patientPhone } = req.body;
+
         if (!patientId || !hospitalId || !appointmentTime) {
             throw new Error("Please fill all the requird fields");
         }
@@ -44,6 +47,13 @@ router.post('/bookappointment', AuthenticatePatient, async (req, res) => {
 router.get('/getforpatient', AuthenticatePatient, async (req, res) => {
     try {
         // const {...other} = req.body;
+        const UpdateUnvisited = await Appointment.updateMany({ appointmentTime: { $lt: Date.now() }, appointmentStatus: "open" }, { appointmentStatus: "notVisited" })
+        if (!UpdateUnvisited) {
+            throw new Error("Error while updating appointment data");
+        }
+        else {
+            console.log(UpdateUnvisited)
+        }
         const result = await Appointment.find({ patientId: req.id }, { __v: 0, patientName: 0, patientEmail: 0, patientPhone: 0 });
         if (result) {
             res.status(200).json(result);
@@ -61,8 +71,11 @@ router.get('/getforpatient', AuthenticatePatient, async (req, res) => {
 // Display appointment for hospital
 router.post('/getforhospital', AuthenticateHospital, async (req, res) => {
     try {
-        const {...other} = req.body;
-        const result = await Appointment.find({ hospitalId: req.id ,...other}, { __v: 0, hospitalName: 0, hospitalEmail: 0, hospitalPhone: 0 });
+        const UpdateUnvisited = await Appointment.updateMany({ appointmentTime: { $lt: Date.now() }, appointmentStatus: "open" }, { appointmentStatus: "notVisited" })
+        if (!UpdateUnvisited) throw new Error("Error while updating appointment data");
+        // else console.log(UpdateUnvisited)
+        const { ...other } = req.body;
+        const result = await Appointment.find({ hospitalId: req.id, ...other }, { __v: 0, hospitalName: 0, hospitalEmail: 0, hospitalPhone: 0 });
         if (result) {
             res.status(200).json(result);
         }

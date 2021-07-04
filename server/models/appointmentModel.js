@@ -34,7 +34,7 @@ const AppointmentSchema = mongoose.Schema({
         type: String,
     }],
     bookingTime: {
-        type: String,
+        type: Date,
         default: Date.now,
     }
 });
