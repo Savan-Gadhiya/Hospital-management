@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 const useStyle = makeStyles(theme => ({
     alert: {
         width: "100%",
-        marginLeft: `-${theme.spacing(2)}px`,
+        // marginLeft: `-${theme.spacing(2)}px`,
     },
 }))
 

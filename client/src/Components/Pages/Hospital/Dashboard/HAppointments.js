@@ -93,8 +93,10 @@ const HAppointment = () => {
 
   useEffect(() => {
     fetchHospitalData();
-    fetchAllAppointment();
   }, []);
+  useEffect(() => {
+    fetchAllAppointment();
+  },[isSuccess]); // fetch data again after updating appointment
   useEffect(() => {
     fetchEmployeeList();
   }, []) // aamname call kariye to hospital id nathi(use state asychronouly work kare atle) malati aetle aam kariyu
@@ -180,17 +182,17 @@ const HAppointment = () => {
   return (
     <>
       <Container>
-        {
-          isSuccess && (<ShowAlert title="Success" description="Appointment updated successfully" />)
-        }
-        {
-          isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
-        }
-        {/* This will open a update appointment Pop Pop box */}
         <PopPopDialogBox open={openModal} setOpen={setOpenModal} title="Update Appointment" onClickOnSaveChange={SubmitUpdatedAppointment}>
           <UpdateAppointmentForm onChange={handleUpdateChange} values={updateAppointment} allEmployee={allEmployee} errors={errors} />
         </PopPopDialogBox>
         <Paper style={{ margin: '10px', padding: "10px" }}>
+          {
+            isSuccess && (<ShowAlert title="Success" description="Appointment updated successfully" />)
+          }
+          {
+            isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
+          }
+          {/* This will open a update appointment Pop Pop box */}
 
           <Typography variant="h3" component="h1">Appointments</Typography>
           {

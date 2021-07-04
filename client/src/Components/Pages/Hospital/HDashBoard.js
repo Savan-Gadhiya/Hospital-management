@@ -5,7 +5,7 @@ import AddEmployee from '../Staff/AddStaff';
 import DashboardMain from './Dashboard/DashboardMain';
 import HAppointments from './Dashboard/HAppointments';
 import { getHospitalData } from '../../Utility_Component/Utility functions';
-import AllAppointments from './Dashboard/AllAppointments';
+import AllAppointments from '../Shared/AllAppointments';
 const HDashBoard = () => {
   const [isLoggedin,setIsLoggedin] = useState(false);
   const [HoapitalData,setHoapitalData] = useState({});

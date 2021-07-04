@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { Typography, Container, IconButton, Paper, Table, TableRow, TableCell, TableBody, makeStyles, TablePagination } from '@material-ui/core';
-import { getHospitalData } from '../../../Utility_Component/Utility functions';
-import THead from '../../../Utility_Component/TableHead';
+import { getHospitalData } from '../../Utility_Component/Utility functions';
+import THead from '../../Utility_Component/TableHead';
 import { useHistory } from "react-router-dom";
 import EditIcon from '@material-ui/icons/Edit';
-import useTableStyle from '../../../Utility_Component/TableStyle';
-import GiveAppointmentIcon from '../../../Utility_Component/GiveAppointmentIcon';
+import useTableStyle from '../../Utility_Component/TableStyle';
+import GiveAppointmentIcon from '../../Utility_Component/GiveAppointmentIcon';
 
 
 const useStyles = makeStyles(theme => ({
   root: {
     paddingLeft: "10px"
-
   }
-}
-))
+}))
 
 
-const AllAppointments = () => {
+const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
   const [allAppointmentData, setAllAppointmentData] = useState([]);
   const [HospitalData, setHospitalData] = useState({});
   const defaultClasses = useTableStyle();
@@ -29,22 +27,22 @@ const AllAppointments = () => {
   const [rowsPerPages, setRowsPerPages] = useState(pagesOption[page]);
 
   // Fetch a hospital data which is logeddin
-  const fetchHospitalData = async () => {
-    const response = await getHospitalData();
-    if (response.status === 200) {
-      const data = response.data;
-      console.log("Hospital ID = ", data);
-      setHospitalData(data);
-    }
-    else {
-      history.push("/dashboard/hospital");
-    }
-  }
+  // const fetchHospitalData = async () => {
+  //   const response = await getHospitalData();
+  //   if (response.status === 200) {
+  //     const data = response.data;
+  //     console.log("Hospital ID = ", data);
+  //     setHospitalData(data);
+  //   }
+  //   else {
+  //     history.push("/dashboard/hospital");
+  //   }
+  // }
 
   // Fetch All Patient Data who contain appointmant with a loggedin hospital
   const fetchAllAppointment = async () => {
     try {
-      const response = await fetch("/api/appointment/getforhospital", {
+      const response = await fetch(fetchURL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +67,6 @@ const AllAppointments = () => {
   }
 
   useEffect(() => {
-    fetchHospitalData();
     fetchAllAppointment();
   }, []);
 
@@ -83,19 +80,20 @@ const AllAppointments = () => {
     setPage(0);
   }
   const recordAfterPagination = () => {
+    console.log(allAppointmentData.slice(page * rowsPerPages, (page + 1) * rowsPerPages))
     return (allAppointmentData.slice(page * rowsPerPages, (page + 1) * rowsPerPages))
   }
 
-  const TableHeadCell = [
-    { id: "sr.no", label: "Sr.No" },
-    { id: "patientInfo", label: "Patient Info" },
-    { id: "medicalStatus", label: "Medical Status" },
-    { id: "remarks", label: "Remarks" },
-    { id: "appointmentHandleBy", label: "Appointment HandleBy" },
-    { id: "medicine", label: "Medicines" },
-    { id: "appoitmentTime", label: "Appoitment Time" },
-    { id: "status", label: "Status" },
-  ];
+  // const TableHeadCell = [
+  //   { id: "sr.no", label: "Sr.No" },
+  //   { id: "patientInfo", label: "Patient Info" },
+  //   { id: "medicalStatus", label: "Medical Status" },
+  //   { id: "remarks", label: "Remarks" },
+  //   { id: "appointmentHandleBy", label: "Appointment HandleBy" },
+  //   { id: "medicine", label: "Medicines" },
+  //   { id: "appoitmentTime", label: "Appoitment Time" },
+  //   { id: "status", label: "Status" },
+  // ];
   return (
     <>
       <Container style={{ padding: "auto" }} classes={{ root: classes.root }} style={{ padding: "0px" }}>
@@ -109,13 +107,13 @@ const AllAppointments = () => {
                   <Table className={defaultClasses.table}>
                     <THead TableHeadCell={TableHeadCell} />
                     <TableBody>
-                      {
-                        recordAfterPagination().map((appointment, index) => (
+                      {renderTableBody(recordAfterPagination())}
+                        {/* recordAfterPagination().map((appointment, index) => (
                           <>
                             <TableRow key={appointment._id}>
                               <TableCell>{index + 1}</TableCell>
                               <TableCell>{appointment.patientName} <br /> {appointment.patientEmail} <br />{appointment.patientPhone}</TableCell>
-                              {/* <TableCell>{appointment.appointmentStatus}</TableCell> */}
+                              {/* <TableCell>{appointment.appointmentStatus}</TableCell> * /}
                               {
                                 appointment.appointmentStatus === "close" ?
                                   (
@@ -143,17 +141,12 @@ const AllAppointments = () => {
                                       <TableCell> - </TableCell>
                                     </>
                                   )
-                              }
-                              <TableCell>{new Date(appointment.appointmentTime).toLocaleString()}</TableCell>
-                              <TableCell>
-                                {GiveAppointmentIcon(appointment.appointmentStatus)}
-
-                              </TableCell>
+                              } 
+                              
                             </TableRow>
                           </>
                         )
-                        )
-                      }
+                        )*/}
                     </TableBody>
                   </Table>
                   <TablePagination

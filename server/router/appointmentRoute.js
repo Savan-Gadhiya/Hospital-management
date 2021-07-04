@@ -44,9 +44,9 @@ router.post('/bookappointment', AuthenticatePatient, async (req, res) => {
 })
 
 // Display a appointment for patient
-router.get('/getforpatient', AuthenticatePatient, async (req, res) => {
+router.post('/getforpatient', AuthenticatePatient, async (req, res) => {
     try {
-        // const {...other} = req.body;
+        const {...other} = req.body;
         const UpdateUnvisited = await Appointment.updateMany({ appointmentTime: { $lt: Date.now() }, appointmentStatus: "open" }, { appointmentStatus: "notVisited" })
         if (!UpdateUnvisited) {
             throw new Error("Error while updating appointment data");
@@ -54,7 +54,7 @@ router.get('/getforpatient', AuthenticatePatient, async (req, res) => {
         else {
             console.log(UpdateUnvisited)
         }
-        const result = await Appointment.find({ patientId: req.id }, { __v: 0, patientName: 0, patientEmail: 0, patientPhone: 0 });
+        const result = await Appointment.find({ patientId: req.id ,...other},{ __v: 0, patientName: 0, patientEmail: 0, patientPhone: 0 });
         if (result) {
             res.status(200).json(result);
         }

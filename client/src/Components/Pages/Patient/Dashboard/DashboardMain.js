@@ -1,4 +1,4 @@
-import React,{ useEffect, useState }  from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '../../../Utility_Component/Card';
 import "../../../Utility_Component/Dashboard.css";
 import { Container, Paper, Typography, makeStyles } from '@material-ui/core';
@@ -17,7 +17,7 @@ const DashboardMain = () => {
     const response = await getPatientData();
     // console.log(response.data);
     if (response.status === 200) {
-      console.log(response.data )
+      console.log(response.data)
       setPatientData(response.data);
     }
   }
@@ -34,12 +34,9 @@ const DashboardMain = () => {
         <Card className="green-bg" title="Appoinment Time" value="2-05-2021 2:30" />
         <Card className="pink-bg" title="Medial Status" value="Normal" />
       </div>
-      {/* <Container>
-        <Paper>
-          <Typography variant="h4" component="h1" style={{margin: "20px 0px",padding: "10px"}}>New Appointments</Typography> */}
-          <PAppointments patientData={patientData}/>
-        {/* </Paper> */}
-      {/* </Container> */}
+
+      {/* Reader PAppointment */}
+      <PAppointments patientData={patientData} />
     </>
   )
 }

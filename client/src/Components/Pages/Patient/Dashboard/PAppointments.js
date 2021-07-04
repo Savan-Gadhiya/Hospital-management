@@ -16,12 +16,13 @@ const Appointments = ({patientData}) => {
 
   const fetchAppointments = async () => {
     const response = await fetch("/api/appointment/getforpatient",{
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "applicaiotn/json"
       },
-      credentials: "include"
+      credentials: "include",
+      body: JSON.stringify({appointmentStatus: "open"})
     });
     const data = await response.json();
     if(response.status === 200){

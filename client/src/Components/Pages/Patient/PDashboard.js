@@ -4,6 +4,7 @@ import DashboardMain from './Dashboard/DashboardMain';
 import NewAppoinment from './Dashboard/NewAppoinment';
 import { getPatientData } from '../../Utility_Component/Utility functions';
 import PAppointments from './Dashboard/PAppointments';
+import PAllAppointment from './Dashboard/PAllAppointment';
 const PDashboard = () => {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [patientData, setPatientData] = useState({});
@@ -24,7 +25,7 @@ const PDashboard = () => {
                 isLoggedin ?
                     (<Switch>
                         <Route exact path="/dashboard/patient"> <DashboardMain /> </Route>
-                        <Route path="/dashboard/patient/appointments"> <PAppointments /> </Route>
+                        <Route path="/dashboard/patient/appointments"> <PAllAppointment /> </Route>
                         <Route path="/dashboard/patient/newappoinments"> <NewAppoinment /> </Route>
                         <Redirect to='/dashboard/patient' />
                     </Switch>
