@@ -1,35 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router';
-import { getPatientData } from '../../../Utility_Component/Utility functions';
+import { getHospitalData } from '../../../Utility_Component/Utility functions';
 import AllAppointments from '../../Shared/AllAppointments';
 import { TableCell, TableRow } from '@material-ui/core';
 import GiveAppointmentIcon from '../../../Utility_Component/GiveAppointmentIcon';
-const PAllAppointment = () => {
-  const [patientData, setPatientData] = useState({});
-  const history = useHistory();
 
-  // Fetch Patient Data which is loggedin
-  const fetchPatientData = async () => {
-    const response = await getPatientData();
+const HAllAppointment = () => {
+  const history = useHistory();
+  const [HospitalData, setHospitalData] = useState({});
+  //  Fetch a hospital data which is logeddin
+  const fetchHospitalData = async () => {
+    const response = await getHospitalData();
     if (response.status === 200) {
       const data = response.data;
-      console.log(data)
-      setPatientData(data);
+      console.log("Hospital ID = ", data);
+      setHospitalData(data);
     }
     else {
-      console.log("GO to PAtientDAshBOard")
-      history.push("/dashboard/patient");
+      history.push("/dashboard/hospital");
     }
   }
 
   useEffect(() => {
-    fetchPatientData();
+    fetchHospitalData();
   }, [])
 
-  const fetchURL = "/api/appointment/getforpatient";
-  const TabelHeadCellForPatient = [
+  const fetchURL = "/api/appointment/getforhospital";
+  const TableHeadCellForHospital = [
     { id: "sr.no", label: "Sr.No" },
-    { id: "hospitalInfo", label: "Hospital Info" },
+    { id: "patientInfo", label: "Patient Info" },
     { id: "medicalStatus", label: "Medical Status" },
     { id: "remarks", label: "Remarks" },
     { id: "appointmentHandleBy", label: "Appointment HandleBy" },
@@ -37,8 +36,8 @@ const PAllAppointment = () => {
     { id: "appoitmentTime", label: "Appoitment Time" },
     { id: "status", label: "Status" },
   ];
-  const renderTableBodyForPatient = (valuesArr) => {
-    console.log("Value Arr = ",valuesArr)
+  const renderTableBodyForHospital = (valuesArr) => {
+    console.log("Value Arr = ", valuesArr)
     return (
       valuesArr.map((appointment, index) => {
         return (
@@ -85,9 +84,9 @@ const PAllAppointment = () => {
   }
   return (
     <>
-      <AllAppointments fetchURL={fetchURL} TableHeadCell={TabelHeadCellForPatient} renderTableBody={renderTableBodyForPatient} />
+      <AllAppointments fetchURL={fetchURL} TableHeadCell={TableHeadCellForHospital} renderTableBody={renderTableBodyForHospital} />
     </>
   )
 }
 
-export default PAllAppointment;
+export default HAllAppointment;

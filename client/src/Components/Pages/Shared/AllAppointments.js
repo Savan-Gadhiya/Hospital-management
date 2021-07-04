@@ -17,7 +17,6 @@ const useStyles = makeStyles(theme => ({
 
 const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
   const [allAppointmentData, setAllAppointmentData] = useState([]);
-  const [HospitalData, setHospitalData] = useState({});
   const defaultClasses = useTableStyle();
   const classes = useStyles();
   const history = useHistory();
@@ -26,18 +25,7 @@ const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
   const [page, setPage] = useState(0);
   const [rowsPerPages, setRowsPerPages] = useState(pagesOption[page]);
 
-  // Fetch a hospital data which is logeddin
-  // const fetchHospitalData = async () => {
-  //   const response = await getHospitalData();
-  //   if (response.status === 200) {
-  //     const data = response.data;
-  //     console.log("Hospital ID = ", data);
-  //     setHospitalData(data);
-  //   }
-  //   else {
-  //     history.push("/dashboard/hospital");
-  //   }
-  // }
+ 
 
   // Fetch All Patient Data who contain appointmant with a loggedin hospital
   const fetchAllAppointment = async () => {
@@ -84,19 +72,11 @@ const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
     return (allAppointmentData.slice(page * rowsPerPages, (page + 1) * rowsPerPages))
   }
 
-  // const TableHeadCell = [
-  //   { id: "sr.no", label: "Sr.No" },
-  //   { id: "patientInfo", label: "Patient Info" },
-  //   { id: "medicalStatus", label: "Medical Status" },
-  //   { id: "remarks", label: "Remarks" },
-  //   { id: "appointmentHandleBy", label: "Appointment HandleBy" },
-  //   { id: "medicine", label: "Medicines" },
-  //   { id: "appoitmentTime", label: "Appoitment Time" },
-  //   { id: "status", label: "Status" },
-  // ];
+ 
+  
   return (
     <>
-      <Container style={{ padding: "auto" }} classes={{ root: classes.root }} style={{ padding: "0px" }}>
+      <Container style={{ padding: "20px" }} classes={{ root: classes.root }}>
         <Paper style={{ margin: '10px auto', padding: "10px" }} >
 
           <Typography variant="h3" component="h1">All Appointments</Typography>
