@@ -10,15 +10,14 @@ import About from "../Components/Pages/About";
 import NavBar from "../Components/Utility_Component/NavBar";
 import DashBoard from "../Components/Pages/DashBoard";
 import Logout from "../Components/Pages/Shared/Logout";
-// import Test from "../Components/Pages/Hospital/Dashboard/AppointmentEditDialog";
-// import Test2 from "../Components/test2";
+import Footer from "../Components/Utility_Component/Footer";
 
 
 const MainRoute = () => {
   return (
     <>
       <NavBar />
-      <div className="Root-container" style={{ paddingTop: "65px" }}>
+      <div className="Root-container" style={{ paddingTop: "65px" ,minHeight: "98vh"}}>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/signup/hospital" component={HospitalSignup} />
@@ -35,8 +34,8 @@ const MainRoute = () => {
           {/* <Route exact path="/layout" component={Layout} />
         <Route exact path="/sidebar" component={SideBar} /> */}
         </Switch>
-
       </div>
+      <Footer />
     </>
   );
 };
