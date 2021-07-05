@@ -1,4 +1,79 @@
-.navbar{
+*,*::after,*::before{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.navContaienr{
+    height: 64px;
+    width: 100%;
+    /* border: 3px solid red; */
+    position: fixed;
+    background-color: #222;
+    color: #fefefe;
+    box-shadow: 2px 0px 5px 3px #fff;
+    z-index: 1299;
+}
+.navBar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 90%;
+    margin: auto;
+    /* border: 3px solid red; */
+}
+.logo .logoText{
+    font-weight: 400;
+}
+
+.navItems .navItem_ul{
+    display: flex;
+    list-style: none;
+}
+.navItems .navItem_ul .navItem{
+    margin: 5px 10px;
+    padding: 5px 1px;
+    color: #fefefe;
+    text-decoration: none;
+}
+.navItems .navItem_ul .navItem:hover{
+    border-bottom: 2px solid #fefefe;
+}
+.navItems .navLinkActive{
+    border-bottom: 2px solid #fefefe;
+}
+.dropDownContent{
+    list-style: none;
+    position: absolute;
+    top: 60px;
+    margin-left: -40px;
+    display: flex;
+    flex-direction: column;
+    background-color: #454545;
+    box-shadow: 2px 2px 14px 2px rgba(0, 0, 0, 0.397);
+    transform: scaleY(0);
+    transform-origin: top center;
+    /* border: 4px solid red; */
+    transition: all 0.5s ease-in-out;
+}
+
+.dropDownContent .dropDownItem{
+    color: #fefefe;
+    padding: 10px;
+    text-decoration: none;
+    box-shadow: 0px 0px 1px 0px #fff;
+}
+.dropDownContent .dropDownItem:hover{
+    background-color: #343434;
+    border: none;
+}
+.dropDownLink:hover .dropDownContent,
+.dropDownContent:hover{
+    transform: scaleY(1);
+    /* border: 5px solid blue; */
+}
+/* .navbar{
     position: fixed;
     width: 100%;
 }
@@ -8,4 +83,4 @@
 }
 .navbar .navbar-brand{
     font-size: 25px;
-}
+} */

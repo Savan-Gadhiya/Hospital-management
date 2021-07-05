@@ -3,6 +3,8 @@ import { Container, Paper, Typography, TextField, Button, makeStyles } from '@ma
 import useDefaultStyle from '../../Form_Component/FormStyle';
 import { useHistory } from "react-router-dom";
 import ShowAlert from '../../Form_Component/ShowAlert';
+import NavBarState from "../../Utility_Component/NavBarState";
+
 const useStyle = makeStyles((theme) => ({
   paperStyle: {
     width: "50%"
@@ -22,7 +24,13 @@ const Login = () => {
   const [values, setValues] = useState({ email: " ", password: "" });
   const [errors, setErrors] = useState({});
   const [isError, setIsError] = useState({ error: false, errorMsg: "" })
-
+  const { isLoggedin,
+    setisLoggedin,
+    whoLoggein,
+    setWhoLoggedin } = NavBarState();
+  if (isLoggedin) {
+    history.push("/");
+  }
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
@@ -44,7 +52,7 @@ const Login = () => {
   const SubmitLoginDetail = async (e) => {
     try {
       e.preventDefault();
-      setIsError({error: false,errorMsg: ""});
+      setIsError({ error: false, errorMsg: "" });
       if (validate()) {
         console.log("REquest send....");
         const response = await fetch("/api/hospital/login", {
@@ -57,10 +65,11 @@ const Login = () => {
         const data = await response.json();
         console.log(data);
         if (response.status === 200) {
-          history.push('/');
+          setisLoggedin(true);
+          window.location.href = "/"
         }
         else {
-          setIsError({error: true,errorMsg: data.msg});
+          setIsError({ error: true, errorMsg: data.msg });
         }
       }
       else {

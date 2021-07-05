@@ -66,7 +66,7 @@ PatientSchema.methods.getAuthenticationToken = async function(){
     try{
         const token = jwt.sign({id: this._id},process.env.SECRET_KEY);
         this.tokens = this.tokens.concat({token: token});
-        await this.save();
+        // await this.save();
         return token;
     }
     catch(err){

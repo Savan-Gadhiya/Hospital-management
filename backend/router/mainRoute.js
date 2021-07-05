@@ -12,6 +12,17 @@ router.use("/api/patient",require("./PatientRoute"));
 router.use("/api/staff",require("./StaffRoute"));
 router.use("/api/appointment",require("./appointmentRoute"));
 
+router.get("/logout",async (req,res) => {
+    try{
+        res.clearCookie("jwtToken",{path: "/"});
+        res.json({msg: "Logout Successfully "})
+    }
+    catch(err){
+        console.log("error in logging out",err)
+        res.status(400).send({msg: "Error in loggingout plese try layer"})
+    }
+
+})
 // router.use("/api/about",authenticatPatient,(req,res) => {
 //     res.json(req.PatientDetail);
 // })
