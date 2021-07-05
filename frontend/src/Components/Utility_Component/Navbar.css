@@ -11,7 +11,7 @@
     position: fixed;
     background-color: #222;
     color: #fefefe;
-    box-shadow: 2px 0px 5px 3px #fff;
+    box-shadow: 2px 0px 15px 5px rgba(255, 255, 255, 0.473);
     z-index: 1299;
 }
 .navBar{
@@ -24,9 +24,8 @@
     /* border: 3px solid red; */
 }
 .logo .logoText{
-    font-weight: 400;
+    font-weight: 300;
 }
-
 .navItems .navItem_ul{
     display: flex;
     list-style: none;

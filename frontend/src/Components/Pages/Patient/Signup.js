@@ -150,7 +150,7 @@ const Signup = () => {
           {
             isError.error && (<ShowAlert title="Error" description={isError.errorMsg.replace("Error: ", "")} severity="error" />)
           }
-          <Typography variant="h3" component="h1" className={DefaultClasses.heading}>Signup</Typography>
+          <Typography variant="h3" component="h1" className={DefaultClasses.heading}>Signup as Patient</Typography>
           <form method="POST" className={DefaultClasses.form} onSubmit={SubmitForm} >
             <TextField
               variant="standard"
