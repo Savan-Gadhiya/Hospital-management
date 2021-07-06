@@ -64,9 +64,9 @@ export default function PopPopDialogBox({open,setOpen,title,children,onClickOnSa
     const classes = useStyles();
     // const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    // const handleClickOpen = () => {
+    //     setOpen(true);
+    // };
     const handleClose = () => {
         setOpen(false);
     };
@@ -86,7 +86,7 @@ export default function PopPopDialogBox({open,setOpen,title,children,onClickOnSa
                     <Button onClick={handleClose} color="default">
                         Cancle
                     </Button>
-                    <Button onClick={handleClose} color="primary" variant="outlined" onClick={() => {onClickOnSaveChange()}}>
+                    <Button color="primary" variant="outlined" onClick={() => {onClickOnSaveChange()}}>
                         Save changes
                     </Button>
                 </DialogActions>

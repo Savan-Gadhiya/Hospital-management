@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Typography, Container, IconButton, Paper, Table, TableRow, TableCell, TableBody, makeStyles, TablePagination } from '@material-ui/core';
+import { Typography, Container,  Paper, Table, TableBody, makeStyles, TablePagination } from '@material-ui/core';
 import THead from '../../Utility_Component/TableHead';
 import { useHistory } from "react-router-dom";
 import useTableStyle from '../../Utility_Component/TableStyle';
@@ -103,4 +103,4 @@ const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
   )
 }
 
-export default AllAppointments
+export default AllAppointments;

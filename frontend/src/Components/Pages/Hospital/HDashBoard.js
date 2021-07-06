@@ -7,7 +7,8 @@ import HAppointments from './Dashboard/HAppointments';
 import { getHospitalData } from '../../Utility_Component/Utility functions';
 import HAllAppointment from './Dashboard/HAllAppointment';
 import DisplayAllStaff from '../Staff/DisplayAllStaff';
-const HDashBoard = () => {
+const HDashBoard = (props) => {
+  console.log("Props.match.url = ",props.match.url);
   const [isLoggedin,setIsLoggedin] = useState(false);
   const [HoapitalData,setHoapitalData] = useState({});
   const fetchHospitalData = async () => {

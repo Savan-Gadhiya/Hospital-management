@@ -28,9 +28,9 @@ const Card = ({icon,title,subtitle,path,linktext}) => {
   )
 }
 const cardArr = [
-  {icon : <i class="far fa-hospital card-icon"></i>,title: "Book A Appointment" , subtitle:"Appointment",path:"/dashboard/patient/newappointment",linktext:"Book Now"},
-  {icon : <i class="fas fa-user-md card-icon"></i>,title: "Manage all Staff" , subtitle:"Hospital",path:"/dashboard/hospital/addemployee",linktext:"Add Staff"},
-  {icon : <i class="far fa-calendar-check card-icon"></i>,title: "Handle Patient's Appointment" , subtitle:"Appointment",path:"/dashboard/hospital/allappointment",linktext: "See Appointment"},
+  {icon : <i className="far fa-hospital card-icon"></i>,title: "Book A Appointment" , subtitle:"Appointment",path:"/dashboard/patient/newappointment",linktext:"Book Now"},
+  {icon : <i className="fas fa-user-md card-icon"></i>,title: "Manage all Staff" , subtitle:"Hospital",path:"/dashboard/hospital/addemployee",linktext:"Add Staff"},
+  {icon : <i className="far fa-calendar-check card-icon"></i>,title: "Handle Patient's Appointment" , subtitle:"Appointment",path:"/dashboard/hospital/allappointment",linktext: "See Appointment"},
 ]
 
 const Home = () => {

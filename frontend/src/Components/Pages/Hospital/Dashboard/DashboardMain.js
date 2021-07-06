@@ -1,6 +1,5 @@
 import React, { useEffect,useState } from 'react'
-import useDefaultStyle from '../../../Form_Component/FormStyle';
-import { Container, Paper, Typography, makeStyles } from '@material-ui/core';
+import { Container, Typography, makeStyles } from '@material-ui/core';
 import Card from '../../../Utility_Component/Card';
 import "../../../Utility_Component/Dashboard.css";
 import { getHospitalData } from '../../../Utility_Component/Utility functions';
@@ -14,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
 const DashboardMain = () => {
   const [appointmentCount,setAppointmentCount] = useState({});
   const [hospitalData,setHospitalData] = useState({});
-  const DefaultClasses = useDefaultStyle();
   const classes = useStyles();
 
   const fetchHospitalData = async () => {
@@ -53,7 +51,7 @@ const DashboardMain = () => {
   return (
     <>
       <Container>
-        <Typography variant="h3" component="h1" className={classes.heading}>Hospital Dashboard</Typography>
+        <Typography variant="h3" component="h1" className={classes.heading}>{hospitalData.name}'s Dashboard</Typography>
       </Container>
       <div className="card-container">
         <Card className="blue-bg" title="Total Appointments" value={appointmentCount.allAppointment} />

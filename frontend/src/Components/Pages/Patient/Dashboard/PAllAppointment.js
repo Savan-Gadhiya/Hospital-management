@@ -16,7 +16,7 @@ const PAllAppointment = () => {
       setPatientData(data);
     }
     else {
-      console.log("GO to PAtientDAshBOard")
+      // console.log("GO to PAtientDAshBOard")
       history.push("/dashboard/patient");
     }
   }
@@ -37,7 +37,6 @@ const PAllAppointment = () => {
     { id: "status", label: "Status" },
   ];
   const renderTableBodyForPatient = (valuesArr,page,rowsPerPages) => {
-    console.log("Value Arr = ",valuesArr)
     return (
       valuesArr.map((appointment, index) => {
         return (

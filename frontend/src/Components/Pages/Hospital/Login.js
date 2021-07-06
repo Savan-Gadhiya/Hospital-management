@@ -112,7 +112,6 @@ const Login = () => {
               label="Password"
               margin="normal"
               value={values.password}
-              // required
               onChange={handleInputChange}
               {...(errors.password && { error: true, helperText: errors.password })}
               fullWidth
