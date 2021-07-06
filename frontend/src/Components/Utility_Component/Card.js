@@ -5,7 +5,7 @@ const Card = (props) => {
         <>
             <div className={`card blue-bg ${props.className}`}>
                 <h3 className="title">{props.title}</h3>
-                <h3 className="value">{props.value}</h3>
+                <h3 className="Cardvalue">{props.value}</h3>
             </div>
         </>
     )

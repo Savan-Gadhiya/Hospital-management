@@ -46,7 +46,7 @@ router.post('/bookappointment', AuthenticatePatient, async (req, res) => {
 // Display a appointment for patient
 router.post('/getforpatient', AuthenticatePatient, async (req, res) => {
     try {
-        const {...other} = req.body;
+        const { ...other } = req.body;
         const UpdateUnvisited = await Appointment.updateMany({ appointmentTime: { $lt: Date.now() }, appointmentStatus: "open" }, { appointmentStatus: "notVisited" })
         if (!UpdateUnvisited) {
             throw new Error("Error while updating appointment data");
@@ -54,7 +54,7 @@ router.post('/getforpatient', AuthenticatePatient, async (req, res) => {
         else {
             console.log(UpdateUnvisited)
         }
-        const result = await Appointment.find({ patientId: req.id ,...other},{ __v: 0, patientName: 0, patientEmail: 0, patientPhone: 0 });
+        const result = await Appointment.find({ patientId: req.id, ...other }, { __v: 0, patientName: 0, patientEmail: 0, patientPhone: 0 });
         if (result) {
             res.status(200).json(result);
         }
@@ -107,6 +107,44 @@ router.patch("/:appointmentId", AuthenticateHospital, async (req, res) => {
     catch (err) {
         console.log("Error while updating appointment");
         res.status(400).json({ msg: err.toString() });
+    }
+})
+
+// Get Appointment Count for parient
+router.get("/patient/getcount", AuthenticatePatient, async (req, res) => {
+    try {
+        const patientId = req.id;
+        const allAppointment = await Appointment.find({ patientId: patientId }).countDocuments();
+        const openAppointment = await Appointment.find({ patientId: patientId, appointmentStatus: "open" }).countDocuments();
+        const closeAppointment = await Appointment.find({ patientId: patientId, appointmentStatus: "close" }).countDocuments();
+        res.status(200).json({
+            allAppointment: allAppointment,
+            openAppointment: openAppointment,
+            closeAppointment: closeAppointment
+        });
+    }
+    catch (err) {
+        console.log("Error while get all appointments for patient", err);
+        res.status(500).json({ msg: "Some thing want to wrong" })
+    }
+});
+
+// Get Appointment count for a hospital
+router.get("/hospital/getcount",AuthenticateHospital, async (req,res) => {
+    try{
+        const hospitalId = req.id;
+        const allAppointment = await Appointment.find({ hospitalId: hospitalId }).countDocuments();
+        const openAppointment = await Appointment.find({ hospitalId: hospitalId, appointmentStatus: "open" }).countDocuments();
+        const closeAppointment = await Appointment.find({ hospitalId: hospitalId, appointmentStatus: "close" }).countDocuments();
+        res.status(200).json({
+            allAppointment: allAppointment,
+            openAppointment: openAppointment,
+            closeAppointment: closeAppointment
+        });
+    }
+    catch(err){
+        console.log("Error while get all Appointment for hospital",err);
+        res.status(500).json({msg: "Some thing want to wrong"});
     }
 })
 module.exports = router;

@@ -194,7 +194,7 @@ const HAppointment = () => {
           }
           {/* This will open a update appointment Pop Pop box */}
 
-          <Typography variant="h3" component="h1">Appointments</Typography>
+          <Typography variant="h3" component="h1">Open Appointments</Typography>
           {
             allAppointmentData !== undefined && allAppointmentData.length ?
               (
@@ -217,7 +217,6 @@ const HAppointment = () => {
                                   <EditIcon style={{ color: "#555" }} />
                                 </IconButton>
                               </TableCell>
-                              {/* <TableCell>{new Date(appointment.time).toLocaleString()}</TableCell> */}
                             </TableRow>
                           </>
                         )

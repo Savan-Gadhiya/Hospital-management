@@ -95,7 +95,7 @@ const AllAppointments = ({fetchURL,TableHeadCell,renderTableBody}) => {
                     onChangePage={handleChangePage}
                   />
                 </>
-              ) : "You not Book any appointment"
+              ) : <Typography component="p" style={{ margin: "20px 0px" }}>You not have any appointment</Typography>
           }
         </Paper>
       </Container>

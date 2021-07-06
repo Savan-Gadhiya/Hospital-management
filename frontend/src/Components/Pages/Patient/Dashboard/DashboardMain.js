@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 const DashboardMain = () => {
   const classes = useStyles();
   const [patientData, setPatientData] = useState({});
-
+  const [appointmentCount,setAppointmentCount] = useState({});
   const fetchPatientData = async () => {
     const response = await getPatientData();
     // console.log(response.data);
@@ -21,8 +21,26 @@ const DashboardMain = () => {
       setPatientData(response.data);
     }
   }
+  const fetchAppointmentCount = async () => {
+    const response = await fetch("/api/appointment/patient/getcount",{
+      method: "GET",
+      headers: {
+        "Content-Type":"application/json",
+        Accept: "application/json"
+      },
+      credentials: "include"
+    });
+    const data = await response.json();
+    if(response.status === 200){
+      setAppointmentCount(data);
+    }
+    else{
+      console.log("Error while fetching count data : ",data);
+    }
+  }
   useEffect(() => {
     fetchPatientData();
+    fetchAppointmentCount();
   }, []);
   return (
     <>
@@ -30,9 +48,9 @@ const DashboardMain = () => {
         <Typography variant="h3" component="h1" className={classes.heading}>{patientData.name}'s Dashboard</Typography>
       </Container>
       <div className="card-container">
-        <Card className="blue-bg" title="Total Appoinments" value="5" />
-        <Card className="green-bg" title="Appoinment Time" value="2-05-2021 2:30" />
-        <Card className="pink-bg" title="Medial Status" value="Normal" />
+        <Card className="blue-bg" title="Total Appoinments" value={appointmentCount.allAppointment} />
+        <Card className="green-bg" title="Open Appointments" value={appointmentCount.openAppointment} />
+        <Card className="pink-bg" title="Closed Appointments" value={appointmentCount.closeAppointment} />
       </div>
 
       {/* Reader PAppointment */}

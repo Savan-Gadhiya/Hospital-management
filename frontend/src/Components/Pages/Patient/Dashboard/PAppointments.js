@@ -67,7 +67,7 @@ const Appointments = ({patientData}) => {
     <>
       <Container>
         <Paper style={{ margin: '10px', padding: "10px" }}>
-          <Typography variant="h4" component="h2">Your Appointments</Typography>
+          <Typography variant="h4" component="h2">Your Open Appointments</Typography>
           {
             appointmentData !== undefined && appointmentData.length ?
               (
@@ -99,7 +99,7 @@ const Appointments = ({patientData}) => {
                     onChangePage={handleChnagePage}
                   />
                 </>
-              ) : "You not Book any appointment"
+              ) : <Typography component="p" style={{ margin: "20px 0px" }}>You not Book any appointment</Typography>
           }
         </Paper>
       </Container>
