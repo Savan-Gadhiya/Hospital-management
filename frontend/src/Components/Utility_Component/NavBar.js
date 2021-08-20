@@ -17,7 +17,7 @@ const NavBar = () => {
           <div className="navItems">
             <ul className="navItem_ul">
               <NavLink to="/" className="navItem" exact activeClassName="navLinkActive"> <li>Home</li> </NavLink>
-              <NavLink to="/about" className="navItem" activeClassName="navLinkActive"> <li>About</li> </NavLink>
+              {/* <NavLink to="/about" className="navItem" activeClassName="navLinkActive"> <li>About</li> </NavLink> */}
               {/* <NavLink to="/contact" className="navItem"> <li>Contact Us</li>  </NavLink> */}
               
               
