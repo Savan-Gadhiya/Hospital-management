@@ -37,14 +37,14 @@ const HAllAppointment = () => {
     { id: "status", label: "Status" },
   ];
   const renderTableBodyForHospital = (valuesArr,page,rowsPerPages) => {
-    console.log("Value Arr = ", valuesArr)
+    // console.log("Value Arr = ", valuesArr)
     return (
       valuesArr.map((appointment, index) => {
         return (
           <>
             <TableRow key={appointment._id}>
               <TableCell>{page*rowsPerPages + index + 1}</TableCell>
-              <TableCell>{appointment.hospitalName} <br /> {appointment.hospitalEmail} <br />{appointment.hospitalPhone}</TableCell>
+              <TableCell>{appointment.patientName} <br /> {appointment.patientEmail} <br />{appointment.patientPhone}</TableCell>
               {
                 appointment.appointmentStatus === "close" ?
                   (

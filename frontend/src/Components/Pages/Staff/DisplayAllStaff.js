@@ -118,7 +118,7 @@ const DisplayAllStaff = () => {
                   onChangePage={handleChangePage}
                 />
               </>
-            ) : "You not Book any appointment"
+            ) : "You have not added any staff member"
           }
         </Paper>
       </Container>

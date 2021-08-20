@@ -1,0 +1,1 @@
+appointment count not change after chaning the appointment status by hospital

@@ -14,9 +14,9 @@ import HospitalImage from "../../../Images/Hospital.jpg";
 import useDefaultStyle from "../../Form_Component/FormStyle";
 
 const useStyle = makeStyles((theme) => ({
-  container:{ 
-    background: `url(${HospitalImage})`
-  }
+  // container:{ 
+  //   background: `url(${HospitalImage})`
+  // }
 }))
 const initalValue = {
   name: "",
